@@ -31,7 +31,7 @@ npm run dev
 ```
 You should get a message that the server is running on port 3000
 
-6) Open your browser at `localhost:3000/static/`. It should be running.
+6) Open your browser at `localhost:3000`. It should be running.
 
 
 The game file is `public/game.js`, there are some resources
