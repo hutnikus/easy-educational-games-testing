@@ -1,10 +1,103 @@
-import {Game, GameElement, GameGif, GameImage, GameShape, GameText, Point} from "../modules/index.js"
+import {Game, GameElement, GameShape, GameText, Point} from "../modules/index.js"
 
 const canvas = document.getElementById('game');
 canvas.width = 600;
 canvas.height = 600;
 
 const game = new Game(canvas);
+
+function inspiro() {
+    //point rotating around mouse
+    let drawn, circles, angles, radii
+
+    function init() {
+        drawn = new GameElement(0, 0, [], {clickable: false})
+        game.addElement(drawn)
+
+        circles = [new GameElement(300, 300,
+            [new GameShape('oval', {rX: 2, rY: 2, fill: 'random', level: 1})],
+            {clickable: false, name: '0'}
+        )]
+        game.addElement(circles[0])
+        angles = [startAngle]
+        radii = [64]
+
+        for (let i = 0; i < satellites-1; i++) {
+            addAnchor()
+        }
+    }
+
+    let lastPos = Point(300,300)
+    let drawing = true
+
+    const petals = 6
+    const satellites = 3
+    const angleDif = 4/5
+    const startAngle = -Math.PI/2
+
+    init()
+
+    function rotateAround(element,pos,attrs) {
+        element.center = Point(
+            attrs.r * Math.cos(attrs.angle) + pos.x,
+            attrs.r * Math.sin(attrs.angle) + pos.y
+        )
+    }
+
+    function addAnchor() {
+        const lastCircle = circles[circles.length-1]
+        const newR = radii[radii.length-1] * angleDif
+        radii.push(newR)
+        angles.push(startAngle)
+        circles.push(
+            new GameElement(
+                newR * Math.cos(0) + lastCircle.center.x,
+                newR * Math.sin(0) + lastCircle.center.y,
+                [new GameShape('oval',{rX:2,rY:2,fill:'random',level:1})],
+                {clickable:false,name:`${circles.length}`}
+            )
+        )
+        game.addElement(circles[circles.length-1])
+    }
+
+    function keypress(event) {
+        console.log(event)
+        if (event.key === ' ') {
+            addAnchor()
+        }
+        if (event.key === 'Enter') {
+            game.clear()
+            init()
+        }
+    }
+
+    function tick(isDrawing) {
+        for (const i in circles) {
+            angles[i] += 0.01 + ((petals/100)*i)
+
+            let pos = lastPos
+            if (i > 0) {
+                pos = Point(
+                    circles[i-1].center.x,
+                    circles[i-1].center.y,
+                )
+            }
+            rotateAround(circles[i],pos,{r:radii[i],angle:angles[i]})
+
+            if (isDrawing) {
+                const drawingCircle = circles[i].children[0]
+                const newChild = new GameShape('oval',{rX:2,rY:2,fill:drawingCircle.fill,dx:circles[i].center.x,dy:circles[i].center.y,level:1})
+                drawn.addChild(newChild,false)
+            }
+        }
+
+        setTimeout(()=>tick(drawing),5)
+    }
+    tick(drawing)
+
+    document.addEventListener('keypress',(ev => keypress(ev)))
+}
+inspiro()
 
 // let's try creating a drawing function
 function drawing() {
@@ -48,7 +141,7 @@ function drawing() {
     canvas.addEventListener('mousemove',(ev => continueDrawing(ev)))
     canvas.addEventListener('mouseup',(ev => finishDrawing(ev)))
 }
-drawing()
+// drawing()
 
 // let's try creating a drag and drop function
 function dragDrop() {
@@ -120,8 +213,8 @@ function button() {
 //         // new GameShape('line',{level:7, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'red',lineWidth:2,}),
 //         // new GameImage('frog','png',{name:'frog1',level:0,width:100,height:100,rotation:0.8}),
 //         // new GameImage('frog','png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}),
-//         // new GameGif('jump',{level:0,width:400,height:200,stagger:10}),
-//         // new GameGif('colors',{level:-1,stagger:10,width:300,height:300}),
+//         new GameGif('jump',{level:0,width:400,height:200,stagger:0}),
+//         new GameGif('colors',{level:-1,stagger:10,width:600,height:600}),
 //     ],
 //     {clickable:true,name:"test",level:5}
 // )
