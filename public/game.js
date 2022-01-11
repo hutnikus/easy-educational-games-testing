@@ -48,7 +48,7 @@ function drawing() {
     canvas.addEventListener('mousemove',(ev => continueDrawing(ev)))
     canvas.addEventListener('mouseup',(ev => finishDrawing(ev)))
 }
-// drawing()
+drawing()
 
 // let's try creating a drag and drop function
 function dragDrop() {
@@ -87,7 +87,7 @@ function dragDrop() {
     canvas.addEventListener('mousemove',(ev => continueDragging(ev)))
     canvas.addEventListener('mouseup',(ev => finishDragging(ev)))
 }
-dragDrop()
+// dragDrop()
 
 // test code to check if clicked inside an element
 // canvas.addEventListener('mousemove',async (event) => await game.drawInside(event))
@@ -127,38 +127,38 @@ function button() {
 // )
 // game.addElement(test)
 
-const element1 = new GameElement(250,250,
-    [
-            new GameText('1',{level:2}),
-            new GameShape('oval',{rX:100,rY:100,fill:'red',level:1,rotation:0.2,stroke:'black',lineWidth:20}),
-    ],
-    {clickable:true,name:'1',level:10}
-)
-game.addElement(element1)
-
-const element2 = new GameElement(350,250,
-    [
-            new GameText('2',{level:10}),
-            new GameShape('oval',{rX:100,rY:100,fill:'blue',level:1,rotation:0.2,stroke:'black',lineWidth:20}),
-    ],
-    {clickable:true,name:'2'}
-)
-game.addElement(element2)
-
-const element3 = new GameElement(250,350,
-    [
-            new GameText('3',{level:10}),
-            new GameShape('oval',{rX:100,rY:100,fill:'green',level:1,rotation:0.2,stroke:'black',lineWidth:20}),
-    ],
-    {clickable:true,name:'3',level:1}
-)
-game.addElement(element3)
-
-const element4 = new GameElement(350,350,
-    [
-            new GameText('4',{level:10}),
-            new GameShape('oval',{rX:100,rY:100,fill:'yellow',level:1,rotation:0.2,stroke:'black',lineWidth:20}),
-    ],
-    {clickable:true,name:'4'}
-)
-game.addElement(element4)
+// const element1 = new GameElement(250,250,
+//     [
+//             new GameText('1',{level:2}),
+//             new GameShape('oval',{rX:100,rY:100,fill:'red',level:1,rotation:0.2,stroke:'black',lineWidth:20}),
+//     ],
+//     {clickable:true,name:'1',level:10}
+// )
+// game.addElement(element1)
+//
+// const element2 = new GameElement(350,250,
+//     [
+//             new GameText('2',{level:10}),
+//             new GameShape('oval',{rX:100,rY:100,fill:'blue',level:1,rotation:0.2,stroke:'black',lineWidth:20}),
+//     ],
+//     {clickable:true,name:'2'}
+// )
+// game.addElement(element2)
+//
+// const element3 = new GameElement(250,350,
+//     [
+//             new GameText('3',{level:10}),
+//             new GameShape('oval',{rX:100,rY:100,fill:'green',level:1,rotation:0.2,stroke:'black',lineWidth:20}),
+//     ],
+//     {clickable:true,name:'3',level:1}
+// )
+// game.addElement(element3)
+//
+// const element4 = new GameElement(350,350,
+//     [
+//             new GameText('4',{level:10}),
+//             new GameShape('oval',{rX:100,rY:100,fill:'yellow',level:1,rotation:0.2,stroke:'black',lineWidth:20}),
+//     ],
+//     {clickable:true,name:'4'}
+// )
+// game.addElement(element4)
