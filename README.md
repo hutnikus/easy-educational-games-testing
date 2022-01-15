@@ -20,7 +20,7 @@ git clone https://github.com/hutnikus/easy-educational-games-testing.git
 cd easy-educational-games-testing/
 ```
 
-4) Install module from npm
+4) Install dependencies from npm
 ```
 npm install
 ```
