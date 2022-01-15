@@ -317,7 +317,9 @@ function displayClickedName() {
         const mouse = game.getMousePos(event)
         const clickedElement = await game.getElementAtPos(mouse)
 
-        console.log(`Clicked element with name: "${clickedElement.name}"`)
+        if (clickedElement !== null) {
+            console.log(`Clicked element with name: "${clickedElement.name}"`)
+        }
     }
 
     canvas.addEventListener('click',(ev => onClick(ev)))
@@ -330,10 +332,12 @@ function moveClickedToTop() {
         const mouse = game.getMousePos(event)
         const clickedElement = await game.getElementAtPos(mouse)
 
-        const highestLevel = Math.max(...game.elements.map(el => el.level))
+        if (clickedElement !== null) {
+            const highestLevel = Math.max(...game.elements.map(el => el.level))
 
-        clickedElement.level = highestLevel + 1
-        game.updateLevels()
+            clickedElement.level = highestLevel + 1
+            game.updateLevels()
+        }
     }
 
     canvas.addEventListener('mousedown',(ev => onClick(ev)))
