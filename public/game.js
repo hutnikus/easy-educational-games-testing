@@ -22,7 +22,17 @@ function rotateElement(el) {
 }
 
 // test code to check if area is inside an element
-// canvas.addEventListener('mousemove',async (event) => await game.drawInside(event))
+function isInside() {
+    canvas.addEventListener('mousemove',async (event) => await game.drawInside(event))
+
+    document.addEventListener("keyup",(e)=>{
+        if (e.code === "Space") {
+            e.preventDefault()
+            game.popElementByName("drawInside")
+        }
+    })
+}
+// isInside()
 
 // satellites that orbit each other and draw their path on canvas
 function inspiro() {
@@ -399,3 +409,30 @@ function testCollisions() {
 
 }
 // testCollisions()
+
+function testKeyboardInput() {
+    const player1 = new GameElement(center.subtract(new Point(100,0)),
+        [new GameShape('oval',{rX:50,rY:50,fill:'blue',name:"kruh"}),new GameText("1",{level: 1})],
+        {draggable:true}
+    )
+    game.addElement(player1)
+    const player2 = new GameElement(center.add(new Point(100,0)),
+        [new GameShape('oval',{rX:50,rY:50,fill:'red',name:"kruh"}),new GameText("2",{level: 1})],
+        {draggable:true}
+    )
+    game.addElement(player2)
+
+    player1.addOnKeyHoldListener("w",()=>player1.move(new Point(0,-5)))
+    player1.addOnKeyHoldListener("a",()=>player1.move(new Point(-5,0)))
+    player1.addOnKeyHoldListener("s",()=>player1.move(new Point(0,5)))
+    player1.addOnKeyHoldListener("d",()=>player1.move(new Point(5,0)))
+
+    player2.addOnKeyHoldListener("ArrowUp",()=>player2.move(new Point(0,-5)))
+    player2.addOnKeyHoldListener("ArrowLeft",()=>player2.move(new Point(-5,0)))
+    player2.addOnKeyHoldListener("ArrowDown",()=>player2.move(new Point(0,5)))
+    player2.addOnKeyHoldListener("ArrowRight",()=>player2.move(new Point(5,0)))
+
+    player1.addOnKeyPressListener(" ",()=>player1.getChildByName("kruh").fill="random")
+    player2.addOnKeyPressListener(" ",()=>player2.getChildByName("kruh").fill="random")
+}
+// testKeyboardInput()
