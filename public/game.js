@@ -11,6 +11,16 @@ const center = new Point(
 
 const game = new Game(canvas);
 
+
+function checkCollisions(obj) {
+    const collisions = game.checkCollisions(obj).map((obj)=>obj.name)
+    console.log(collisions)
+}
+
+function rotateElement(el) {
+    el.rotation += 0.01
+}
+
 // test code to check if area is inside an element
 // canvas.addEventListener('mousemove',async (event) => await game.drawInside(event))
 
@@ -18,7 +28,7 @@ const game = new Game(canvas);
 function inspiro() {
 
     // center
-    let lastPos = Point(300,300)
+    let lastPos = new Point(300,300)
     let drawing = true
 
     const petals = -2
@@ -51,7 +61,7 @@ function inspiro() {
     init()
 
     function rotateAround(element,pos,attrs) {
-        element.center = Point(
+        element.center = new Point(
             attrs.r * Math.cos(attrs.angle) + pos.x,
             attrs.r * Math.sin(attrs.angle) + pos.y
         )
@@ -81,7 +91,7 @@ function inspiro() {
         } else {
             // vytvaram prvy
             newR = startRadius
-            pos = Point(
+            pos = new Point(
                 newR * Math.cos(startAngle) + 300,
                 newR * Math.sin(startAngle) + 300
             )
@@ -124,7 +134,7 @@ function inspiro() {
 
             let pos = lastPos
             if (i > 0) {
-                pos = Point(
+                pos = new Point(
                     circles[i-1].center.x,
                     circles[i-1].center.y,
                 )
@@ -133,7 +143,7 @@ function inspiro() {
 
             if (isDrawing) {
                 const drawingLine = drawn.children[i]
-                drawingLine.addPoint(Point(circles[i].center.x,circles[i].center.y))
+                drawingLine.addPoint(new Point(circles[i].center.x,circles[i].center.y))
             }
         }
     }
@@ -261,7 +271,7 @@ function pogs() {
     }
 
     function moveToTop(attrs={obj:undefined,level:undefined}) {
-        game.changeLevel(attrs.obj,attrs.level()+1)
+        game.changeLevelOfElement(attrs.obj,attrs.level()+1)
     }
 
     function checkCollisions(obj) {
@@ -274,7 +284,7 @@ function pogs() {
         objt.addOnFinishDraggingListener(checkCollisions,objt)
     }
 }
-pogs()
+// pogs()
 
 // test display name of clicked object
 function displayClickedName() {
@@ -300,8 +310,7 @@ function moveClickedToTop() {
         if (clickedElement !== null) {
             const highestLevel = Math.max(...game.elements.map(el => el.level))
 
-            clickedElement.level = highestLevel + 1
-            game.updateLevels()
+            game.changeLevelOfElement(clickedElement,highestLevel+1)
         }
     }
 
@@ -311,7 +320,7 @@ function moveClickedToTop() {
 
 //test function for GameCanvas (but also buttons)
 function testGameCanvas() {
-    const gCanvas = new GameCanvas(new Point(300,150),{width:600})
+    const gCanvas = new GameCanvas(new Point(300,150),{width:200,height:200})
     game.addElement(gCanvas)
 
     function changeColor(color) {
@@ -332,7 +341,7 @@ function testGameCanvas() {
     game.addElement(clearButton)
     clearButton.addOnButtonPressListener(()=>gCanvas.clear())
 
-    redButton.addOnButtonPressListener(()=>console.log(gCanvas.children),'red')
+    setInterval(()=>rotateElement(gCanvas),20)
 }
 // testGameCanvas()
 
@@ -365,3 +374,28 @@ function testDrawables() {
 }
 // testDrawables()
 
+function testCollisions() {
+    const el1 = new GameElement(center.copy().add(new Point(100,0)),
+        [
+            new GameShape('rectangle',{width:100,height:50,fill:'red',stroke:'black',level:0,rotation:0}),
+        ],
+        {clickable:true,draggable:true, name:"test1",level:5,hitboxes:[new GameHitbox(50)],hitboxVisible:true}
+    )
+    game.addElement(el1)
+
+    const el2 = new GameElement(center.copy().subtract(new Point(100,0)),
+        [
+            new GameShape('rectangle',{width:100,height:50,fill:'red',stroke:'black',level:0,rotation:0}),
+        ],
+        {clickable:true,draggable:true, name:"test2",level:5,hitboxes:[new GameHitbox(50),new GameHitbox(20,-70)],hitboxVisible:true}
+    )
+    game.addElement(el2)
+
+    setInterval(()=>rotateElement(el2),20)
+
+    for (const obj of [el1,el2]) {
+        obj.addOnFinishDraggingListener(checkCollisions,obj)
+    }
+
+}
+// testCollisions()
