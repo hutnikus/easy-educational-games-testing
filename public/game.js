@@ -1,4 +1,4 @@
-import {Game, GameElement, GameShape, GameText, GameImage, GameGif, Point, GameCanvas, GameButton} from "../modules/index.js"
+import {Game, GameElement, GameShape, GameText, GameImage, GameGif, Point, GameCanvas, GameButton, GameHitbox} from "../modules/index.js"
 
 const canvas = document.getElementById('game');
 canvas.width = 600;
@@ -201,7 +201,7 @@ function pogs() {
                 lineWidth: 20
             }),
         ],
-        {clickable: true, draggable:true, name: '1-red', level: 10}
+        {clickable: true, draggable:true, name: '1-red', level: 10,hitboxes:[new GameHitbox(100)],hitboxVisible:true}
     )
     game.addElement(element1)
 
@@ -218,7 +218,7 @@ function pogs() {
                 lineWidth: 20
             }),
         ],
-        {clickable: true,draggable:true, name: '2-blue'}
+        {clickable: true,draggable:true, name: '2-blue',hitboxes:[new GameHitbox(100)],hitboxVisible:true}
     )
     game.addElement(element2)
 
@@ -235,7 +235,7 @@ function pogs() {
                 lineWidth: 20
             }),
         ],
-        {clickable: true,draggable:true, name: '3-green', level: 1}
+        {clickable: true,draggable:true, name: '3-green', level: 1,hitboxes:[new GameHitbox(100)],hitboxVisible:true}
     )
     game.addElement(element3)
 
@@ -252,7 +252,7 @@ function pogs() {
                 lineWidth: 20
             }),
         ],
-        {clickable: true,draggable:true, name: '4-yellow'}
+        {clickable: true,draggable:true, name: '4-yellow',hitboxes:[new GameHitbox(100)],hitboxVisible:true}
     )
     game.addElement(element4)
 
@@ -264,8 +264,14 @@ function pogs() {
         game.changeLevel(attrs.obj,attrs.level()+1)
     }
 
+    function checkCollisions(obj) {
+        const collisions = game.checkCollisions(obj).map((obj)=>obj.name)
+        console.log(collisions)
+    }
+
     for (const objt of [element1,element2,element3,element4]) {
         objt.addOnClickListener(moveToTop,{obj: objt,level:topLevel})
+        objt.addOnFinishDraggingListener(checkCollisions,objt)
     }
 }
 pogs()
@@ -331,29 +337,31 @@ function testGameCanvas() {
 // testGameCanvas()
 
 // uncomment this to test drawables
-const test = new GameElement(center.copy(),
-    [
-        // new GameText('text',{level:10,dx:-100,rotation:-0.3}),
-        // new GameText('text',{level:10,dx:100,rotation:-0.3,hScale:-1}),
-        // new GameShape('rectangle',{width:100,height:50,dx:-100,fill:'red',stroke:'black',level:0,rotation:0}),
-        // new GameShape('rectangle',{width:100,height:200,stroke:'black',fill:'red',lineWidth:2,level:1,rotation:0.3}),
-        // new GameText('level1',{level:1}),
-        // new GameShape('oval',{rX:100,rY:50,fill:'red',level:1,stroke:'black',lineWidth:20,rotation:Math.PI/2}),
-        // new GameShape('oval',{rX:50,rY:20,dx:200, dy:200,fill:'blue',level:1,rotation:0.4}),
-        // new GameShape('polygon',{name:'poly center',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3}),
-        // new GameShape('polygon',{name:'poly center mirrored',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3,hScale:-1}),
-        // new GameShape('polygon',{name:'poly right',level:6,dx:200, coords:[-100,-5,10,-10,30,30],fill:'red',rotation:1}),
-        // new GameShape('line',{level:6, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'black',lineWidth:50,}),
-        // new GameShape('line',{level:7, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'red',lineWidth:2,}),
-        // new GameImage('frog','png',{name:'frog1',dy:100,level:0,width:100,height:100,rotation:0}),
-        // new GameImage('frog','png',{name:'frog3',dy:100,level:0,width:100,height:100,rotation:Math.PI}),
-        // new GameImage('frog','png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}),
-        // new GameGif('jump',{level:0,width:400,height:200,stagger:0}),
-        // new GameGif('jump',{level:0,width:400,height:200,stagger:0,hScale:-1}),
-        // new GameGif('colors',{level:-1,stagger:10,width:600,height:600}),
-    ],
-    {clickable:true,draggable:true, name:"test",level:5}
-)
-game.addElement(test)
-
+function testDrawables() {
+    const test = new GameElement(center.copy(),
+        [
+            new GameText('text',{level:10,dx:-100,rotation:-0.3}),
+            new GameText('text',{level:10,dx:100,rotation:-0.3,hScale:-1}),
+            new GameShape('rectangle',{width:100,height:50,dx:-100,fill:'red',stroke:'black',level:0,rotation:0}),
+            new GameShape('rectangle',{width:100,height:200,stroke:'black',fill:'red',lineWidth:2,level:1,rotation:0.3}),
+            new GameText('level1',{level:1}),
+            new GameShape('oval',{rX:100,rY:50,fill:'red',level:1,stroke:'black',lineWidth:20,rotation:Math.PI/2}),
+            new GameShape('oval',{rX:50,rY:20,dx:200, dy:200,fill:'blue',level:1,rotation:0.4}),
+            new GameShape('polygon',{name:'poly center',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3}),
+            new GameShape('polygon',{name:'poly center mirrored',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3,hScale:-1}),
+            new GameShape('polygon',{name:'poly right',level:6,dx:200, coords:[-100,-5,10,-10,30,30],fill:'red',rotation:1}),
+            new GameShape('line',{level:6, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'black',lineWidth:50,}),
+            new GameShape('line',{level:7, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'red',lineWidth:2,}),
+            new GameImage('frog','png',{name:'frog1',dy:100,level:0,width:100,height:100,rotation:0}),
+            new GameImage('frog','png',{name:'frog3',dy:100,level:0,width:100,height:100,rotation:Math.PI}),
+            new GameImage('frog','png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}),
+            new GameGif('jump',{level:0,width:400,height:200,stagger:0}),
+            new GameGif('jump',{level:0,width:400,height:200,stagger:0,hScale:-1}),
+            new GameGif('colors',{level:-1,stagger:10,width:600,height:600}),
+        ],
+        {clickable:true,draggable:true, name:"test",level:5}
+    )
+    game.addElement(test)
+}
+// testDrawables()
 
