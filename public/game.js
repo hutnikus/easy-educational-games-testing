@@ -436,3 +436,72 @@ function testKeyboardInput() {
     player2.addOnKeyPressListener(" ",()=>player2.getChildByName("kruh").fill="random")
 }
 // testKeyboardInput()
+
+function testConnectBoxes() {
+    const coordsX = [100,500]
+    const coordsY = [100,300,500]
+    const values = [["a","b","c"],["A","B","C"]]
+    for (let i = 0; i < coordsX.length; i++) {
+        for (let j = 0; j < coordsY.length; j++) {
+            const el = new GameElement(
+                new Point(coordsX.at(i),coordsY.at(j)),
+                [
+                    new GameShape('rectangle',{width:100,height:50,fill:"tan"}),
+                    new GameText(values.at(i).at(j),{level: 1}),
+                    new GameShape("line",{coords:[0,0,0,0],name:"line",level: 2,stroke:'black',lineWidth:2})
+                ],
+                {clickable:true,draggable:true,stationary:true,name:values.at(i).at(j)}
+            )
+            game.addElement(el)
+
+            const line = new GameElement(
+                new Point(coordsX.at(i),coordsY.at(j)),
+                [
+                    new GameShape("line",{coords:[0,0,0,0],name:"line",stroke:'black',lineWidth:2})
+                ],
+                {name:`line${values.at(i).at(j)}`,level: 2}
+            )
+            game.addElement(line)
+        }
+    }
+    for (let i = 0; i < coordsX.length; i++) {
+        for (let j = 0; j < coordsY.length; j++) {
+            const letter = values.at(i).at(j)
+
+            const element = game.getElementByName(letter)
+            element.addOnClickListener(()=>{
+                const line = game.getElementByName(`line${letter}`).getChildByName("line")
+                line.setLine(new Point(0,0),game.shared.mousePos.subtract(element.center))
+            })
+            element.addOnDragListener(()=>{
+                const line = game.getElementByName(`line${letter}`).getChildByName("line")
+                line.setLine(new Point(0,0),game.shared.mousePos.subtract(element.center))
+            })
+            element.addOnFinishDraggingListener(async () => {
+                const target = await game.getElementAtPos(game.shared.mousePos)
+                const line = game.getElementByName(`line${letter}`).getChildByName("line")
+                // if on the same side or air
+                if (target === null || target.center.x === element.center.x) {
+                    //return to original
+                    line.setLine(new Point(0,0),new Point(0,0))
+                    return
+                }
+
+                //snap line
+                line.setLine(new Point(0,0),target.center.subtract(element.center))
+                //color based on correctness
+                if (letter.toLowerCase() === target.name.toLowerCase()) {
+                    line.stroke = 'green'
+                } else {
+                    line.stroke = 'red'
+                }
+                // disable elements
+                element.draggable = false
+                element.clickable = false
+                target.draggable = false
+                target.clickable = false
+            })
+        }
+    }
+}
+testConnectBoxes()
