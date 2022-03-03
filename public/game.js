@@ -1,4 +1,4 @@
-import {Game, GameElement, GameShape, GameText, GameImage, GameGif, Point, GameCanvas, GameButton, GameHitbox} from "../modules/index.js"
+import {Game, GameElement, GameShape, GameText, GameImage, GameGif, Point, GameCanvas, GameButton, GameHitbox, GameTextInput} from "../modules/index.js"
 
 const canvas = document.getElementById('game');
 canvas.width = 600;
@@ -504,4 +504,18 @@ function testConnectBoxes() {
         }
     }
 }
-testConnectBoxes()
+// testConnectBoxes()
+
+function testTextInput() {
+    const input = new GameTextInput(new Point(300,300))
+    game.addElement(input)
+
+    let i = 1
+    input.message = `Message ${i}`
+
+    input.addOnEnterTextListener(()=> {
+        i += 1
+        input.message = `Message ${i}`
+    })
+}
+testTextInput()
