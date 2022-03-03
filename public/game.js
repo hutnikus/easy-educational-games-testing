@@ -371,9 +371,9 @@ function testDrawables() {
             new GameShape('polygon',{name:'poly right',level:6,dx:200, coords:[-100,-5,10,-10,30,30],fill:'red',rotation:1}),
             new GameShape('line',{level:6, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'black',lineWidth:50,}),
             new GameShape('line',{level:7, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'red',lineWidth:2,}),
-            new GameImage('frog','png',{name:'frog1',dy:100,level:0,width:100,height:100,rotation:0}),
-            new GameImage('frog','png',{name:'frog3',dy:100,level:0,width:100,height:100,rotation:Math.PI}),
-            new GameImage('frog','png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}),
+            new GameImage('frog.png',{name:'frog1',dy:100,level:0,width:100,height:100,rotation:0}),
+            new GameImage('frog.png',{name:'frog3',dy:100,level:0,width:100,height:100,rotation:Math.PI}),
+            new GameImage('frog.png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}),
             new GameGif('jump',{level:0,width:400,height:200,stagger:0}),
             new GameGif('jump',{level:0,width:400,height:200,stagger:0,hScale:-1}),
             new GameGif('colors',{level:-1,stagger:10,width:600,height:600}),
@@ -518,4 +518,33 @@ function testTextInput() {
         input.message = `Message ${i}`
     })
 }
-testTextInput()
+// testTextInput()
+
+function testCopyDrawables() {
+    const gif = new GameGif('jump',{name:"gif",width:100,height:100,stagger:0})
+    const text = new GameText('text',{name:"text"})
+    const img = new GameImage('frog.png',{name:'img',width:100,height:100})
+    const shape = new GameShape('polygon',{name:'shape', coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3})
+
+    const topLeft = new GameElement(new Point(100,100),[],{})
+    game.addElement(topLeft)
+    const topRight = new GameElement(new Point(500,100),[],{})
+    game.addElement(topRight)
+    const bottomLeft = new GameElement(new Point(100,500),[],{})
+    game.addElement(bottomLeft)
+    const bottomRight = new GameElement(new Point(500,500),[],{})
+    game.addElement(bottomRight)
+
+    const c1 = img.copy()
+    const c2 = c1.copy()
+    c2.rotation = 1
+    const c3 = c2.copy()
+    c2.rotation = 0
+    const c4 = c3.copy()
+
+    topLeft.addChild(c1)
+    topRight.addChild(c2)
+    bottomLeft.addChild(c3)
+    bottomRight.addChild(c4)
+}
+testCopyDrawables()
