@@ -14,7 +14,7 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
-    "easy-educational-games": "^1.0.6",
+    "easy-educational-games": "^1.0.12",
     "express": "^4.17.3"
   }
 }
