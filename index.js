@@ -12,6 +12,8 @@ const APP = express()
 // //set module folder (client side)
 // APP.use("/modules",express.static(G.modulesPath))
 
+APP.set("port",PORT)
+
 APP.get('/', (req, res) => {
     res.send("GET Request Called")
 })
