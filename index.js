@@ -7,6 +7,8 @@ const SERVER = http.createServer(APP)
 
 const G = require("easy-educational-games")
 
+console.log("here")
+
 //set public folder (this page)
 APP.use(express.static("./public"))
 //set module folder (client side)
