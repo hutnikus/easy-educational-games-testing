@@ -7,10 +7,10 @@ const SERVER = http.createServer(APP)
 
 const G = require("easy-educational-games")
 
-//set public folder (this page)
-APP.use(express.static("./public"))
-//set module folder (client side)
-APP.use("/modules",express.static(G.modulesPath))
+// //set public folder (this page)
+// APP.use(express.static("./public"))
+// //set module folder (client side)
+// APP.use("/modules",express.static(G.modulesPath))
 
 APP.get('/', (req, res) => {
     res.send("GET Request Called")
@@ -23,5 +23,5 @@ APP.listen(PORT, function(err){
 
 //todo socket.io server
 
-SERVER.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+// SERVER.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 
