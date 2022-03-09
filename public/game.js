@@ -1,21 +1,19 @@
-
-// first import is for the page to be used (uncomment when testing code)
-import {Game, GameElement, GameShape, GameText, GameImage, GameGif, Point, GameCanvas, GameButton, GameHitbox, GameTextInput} from "../modules/index.js"
-
-// second import is for typing (includes the library for code completion), but won't work on the page
-// import {Game, GameElement, GameShape, GameText, GameImage, GameGif, Point, GameCanvas, GameButton, GameHitbox, GameTextInput} from "../../easy-educational-games/public/modules/index.js"
+// working code
+import * as G from "../modules/index.js"
+// code completion
+// import * as G from "../../easy-educational-games/public/modules/index.js"
 
 
 const canvas = document.getElementById('game');
 canvas.width = 600;
 canvas.height = 600;
 
-const center = new Point(
+const center = new G.Point(
     canvas.width/2,
     canvas.height/2
 )
 
-const game = new Game(canvas);
+const game = new G.Game(canvas);
 
 
 function checkCollisions(obj) {
@@ -44,7 +42,7 @@ function isInside() {
 function spirograph() {
 
     // center
-    let lastPos = new Point(300,300)
+    let lastPos = new G.Point(300,300)
     let drawing = true
 
     const petals = 3
@@ -62,7 +60,7 @@ function spirograph() {
         // points rotating around each other
         circles = []
         // element that draws the shapes
-        drawn = new GameElement(new Point(0,0), [], {clickable: false})
+        drawn = new G.GameElement(new G.Point(0,0), [], {clickable: false})
         game.addElement(drawn)
         // current angles of points relative to each other
         angles = []
@@ -77,7 +75,7 @@ function spirograph() {
     init()
 
     function rotateAround(element,pos,attrs) {
-        element.center = new Point(
+        element.center = new G.Point(
             attrs.r * Math.cos(attrs.angle) + pos.x,
             attrs.r * Math.sin(attrs.angle) + pos.y
         )
@@ -92,12 +90,12 @@ function spirograph() {
             pos = circles[circles.length-1].center
             newR = radii[radii.length-1] * angleDif
 
-            lastCircle = new GameElement(
-                new Point(
+            lastCircle = new G.GameElement(
+                new G.Point(
                     newR * Math.cos(0) + pos.x,
                     newR * Math.sin(0) + pos.y
                 ),
-                [new GameShape('oval',{rX:circleRadius,rY:circleRadius,fill:'random',level:1})],
+                [new G.GameShape('oval',{rX:circleRadius,rY:circleRadius,fill:'random',level:1})],
                 {clickable:false,name:`${circles.length}`}
             )
 
@@ -107,14 +105,14 @@ function spirograph() {
         } else {
             // vytvaram prvy
             newR = startRadius
-            pos = new Point(
+            pos = new G.Point(
                 newR * Math.cos(startAngle) + 300,
                 newR * Math.sin(startAngle) + 300
             )
 
-            lastCircle = new GameElement(
+            lastCircle = new G.GameElement(
                 pos.copy(),
-                [new GameShape('oval',{rX:circleRadius,rY:circleRadius,fill:'random',level:1})],
+                [new G.GameShape('oval',{rX:circleRadius,rY:circleRadius,fill:'random',level:1})],
                 {clickable:false,name:`${circles.length}`}
             )
 
@@ -126,7 +124,7 @@ function spirograph() {
 
         game.addElement(lastCircle)
         drawn.addChild(
-            new GameShape('line',{coords:[lastCircle.center.x,lastCircle.center.y,lastCircle.center.x,lastCircle.center.y],stroke:lastCircle.children[0].fill,lineWidth:lineWidth,})
+            new G.GameShape('line',{coords:[lastCircle.center.x,lastCircle.center.y,lastCircle.center.x,lastCircle.center.y],stroke:lastCircle.children[0].fill,lineWidth:lineWidth,})
         )
     }
 
@@ -150,7 +148,7 @@ function spirograph() {
 
             let pos = lastPos
             if (i > 0) {
-                pos = new Point(
+                pos = new G.Point(
                     circles[i-1].center.x,
                     circles[i-1].center.y,
                 )
@@ -159,7 +157,7 @@ function spirograph() {
 
             if (isDrawing) {
                 const drawingLine = drawn.children[i]
-                drawingLine.addPoint(new Point(circles[i].center.x,circles[i].center.y))
+                drawingLine.addPoint(new G.Point(circles[i].center.x,circles[i].center.y))
             }
         }
     }
@@ -176,10 +174,10 @@ function spirograph() {
 
 // test drag and drop function
 function dragDrop() {
-    const element1 = new GameElement(center,
+    const element1 = new G.GameElement(center,
         [
-            new GameText('1', {level: 2}),
-            new GameShape('oval', {
+            new G.GameText('1', {level: 2}),
+            new G.GameShape('oval', {
                 rX: 100,
                 rY: 100,
                 fill: 'red',
@@ -214,10 +212,10 @@ function dragDrop() {
 
 // colorful circle objects to test clicking or drawing
 function pogs() {
-    const element1 = new GameElement(new Point(250, 250),
+    const element1 = new G.GameElement(new G.Point(250, 250),
         [
-            new GameText('1', {level: 2}),
-            new GameShape('oval', {
+            new G.GameText('1', {level: 2}),
+            new G.GameShape('oval', {
                 rX: 100,
                 rY: 100,
                 fill: 'red',
@@ -227,14 +225,14 @@ function pogs() {
                 lineWidth: 20
             }),
         ],
-        {clickable: true, draggable:true, name: '1-red', level: 10,hitboxes:[new GameHitbox(100)],hitboxVisible:true}
+        {clickable: true, draggable:true, name: '1-red', level: 10,hitboxes:[new G.GameHitbox(100)],hitboxVisible:true}
     )
     game.addElement(element1)
 
-    const element2 = new GameElement(new Point(350, 250),
+    const element2 = new G.GameElement(new G.Point(350, 250),
         [
-            new GameText('2', {level: 10}),
-            new GameShape('oval', {
+            new G.GameText('2', {level: 10}),
+            new G.GameShape('oval', {
                 rX: 100,
                 rY: 100,
                 fill: 'blue',
@@ -244,14 +242,14 @@ function pogs() {
                 lineWidth: 20
             }),
         ],
-        {clickable: true,draggable:true, name: '2-blue',hitboxes:[new GameHitbox(100)],hitboxVisible:true}
+        {clickable: true,draggable:true, name: '2-blue',hitboxes:[new G.GameHitbox(100)],hitboxVisible:true}
     )
     game.addElement(element2)
 
-    const element3 = new GameElement(new Point(250, 350),
+    const element3 = new G.GameElement(new G.Point(250, 350),
         [
-            new GameText('3', {level: 10}),
-            new GameShape('oval', {
+            new G.GameText('3', {level: 10}),
+            new G.GameShape('oval', {
                 rX: 100,
                 rY: 100,
                 fill: 'green',
@@ -261,14 +259,14 @@ function pogs() {
                 lineWidth: 20
             }),
         ],
-        {clickable: true,draggable:true, name: '3-green', level: 1,hitboxes:[new GameHitbox(100)],hitboxVisible:true}
+        {clickable: true,draggable:true, name: '3-green', level: 1,hitboxes:[new G.GameHitbox(100)],hitboxVisible:true}
     )
     game.addElement(element3)
 
-    const element4 = new GameElement(new Point(350, 350),
+    const element4 = new G.GameElement(new G.Point(350, 350),
         [
-            new GameText('4', {level: 10}),
-            new GameShape('oval', {
+            new G.GameText('4', {level: 10}),
+            new G.GameShape('oval', {
                 rX: 100,
                 rY: 100,
                 fill: 'yellow',
@@ -278,7 +276,7 @@ function pogs() {
                 lineWidth: 20
             }),
         ],
-        {clickable: true,draggable:true, name: '4-yellow',hitboxes:[new GameHitbox(100)],hitboxVisible:true}
+        {clickable: true,draggable:true, name: '4-yellow',hitboxes:[new G.GameHitbox(100)],hitboxVisible:true}
     )
     game.addElement(element4)
 
@@ -334,18 +332,18 @@ function moveClickedToTop() {
 }
 // moveClickedToTop()
 
-//test function for GameCanvas (but also buttons)
+//test function for G.GameCanvas (but also buttons)
 function testGameCanvas() {
-    const gCanvas = new GameCanvas(new Point(300,150),{width:200,height:200})
+    const gCanvas = new G.GameCanvas(new G.Point(300,150),{width:200,height:200})
     game.addElement(gCanvas)
 
     function changeColor(color) {
         gCanvas.stroke = color
     }
 
-    const redButton = new GameButton(new Point(150,450),{color:'red',text:'Červená'})
-    const greenButton = new GameButton(new Point(300,450),{color:'green',text:'Zelená'})
-    const blueButton = new GameButton(new Point(450,450),{color:'blue',text:'Modrá'})
+    const redButton = new G.GameButton(new G.Point(150,450),{color:'red',text:'Červená'})
+    const greenButton = new G.GameButton(new G.Point(300,450),{color:'green',text:'Zelená'})
+    const blueButton = new G.GameButton(new G.Point(450,450),{color:'blue',text:'Modrá'})
     game.addElement(redButton)
     game.addElement(greenButton)
     game.addElement(blueButton)
@@ -353,7 +351,7 @@ function testGameCanvas() {
     greenButton.addOnButtonPressListener(changeColor,'green')
     blueButton.addOnButtonPressListener(changeColor,'blue')
 
-    const clearButton = new GameButton(new Point(300,375),{text:'Zmaž'})
+    const clearButton = new G.GameButton(new G.Point(300,375),{text:'Zmaž'})
     game.addElement(clearButton)
     clearButton.addOnButtonPressListener(()=>gCanvas.clear())
 
@@ -363,47 +361,47 @@ function testGameCanvas() {
 
 // uncomment this to test drawables
 function testDrawables() {
-    const test = new GameElement(center.copy(),
+    const test = new G.GameElement(center.copy(),
         [
-            new GameText('text',{level:10,dx:-100,rotation:-0.3}),
-            new GameText('text',{level:10,dx:100,rotation:-0.3,hScale:-1}),
-            // new GameShape('rectangle',{width:100,height:50,dx:-100,fill:'red',stroke:'black',level:0,rotation:0}),
-            // new GameShape('rectangle',{width:100,height:200,stroke:'black',fill:'red',lineWidth:2,level:1,rotation:0.3}),
-            // new GameText('level1',{level:1}),
-            // new GameShape('oval',{rX:100,rY:50,fill:'red',level:1,stroke:'black',lineWidth:20,rotation:Math.PI/2}),
-            // new GameShape('oval',{rX:50,rY:20,dx:200, dy:200,fill:'blue',level:1,rotation:0.4}),
-            // new GameShape('polygon',{name:'poly center',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3}),
-            // new GameShape('polygon',{name:'poly center mirrored',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3,hScale:-1}),
-            // new GameShape('polygon',{name:'poly right',level:6,dx:200, coords:[-100,-5,10,-10,30,30],fill:'red',rotation:1}),
-            // new GameShape('line',{level:6, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'black',lineWidth:50,}),
-            // new GameShape('line',{level:7, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'red',lineWidth:2,}),
-            // new GameImage('frog.png',{name:'frog1',dy:100,level:0,width:100,height:100,rotation:0}),
-            // new GameImage('frog.png',{name:'frog3',dy:100,level:0,width:100,height:100,rotation:Math.PI}),
-            // new GameImage('frog.png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}),
-            // new GameGif('jump',{level:0,width:400,height:200,stagger:0}),
-            // new GameGif('jump',{level:0,width:400,height:200,stagger:0,hScale:-1}),
-            // new GameGif('colors',{level:-1,stagger:10,width:600,height:600}),
+            new G.GameText('text',{level:10,dx:-100,rotation:-0.3}),
+            new G.GameText('text',{level:10,dx:100,rotation:-0.3,hScale:-1}),
+            // new G.GameShape('rectangle',{width:100,height:50,dx:-100,fill:'red',stroke:'black',level:0,rotation:0}),
+            // new G.GameShape('rectangle',{width:100,height:200,stroke:'black',fill:'red',lineWidth:2,level:1,rotation:0.3}),
+            // new G.GameText('level1',{level:1}),
+            // new G.GameShape('oval',{rX:100,rY:50,fill:'red',level:1,stroke:'black',lineWidth:20,rotation:Math.PI/2}),
+            // new G.GameShape('oval',{rX:50,rY:20,dx:200, dy:200,fill:'blue',level:1,rotation:0.4}),
+            // new G.GameShape('polygon',{name:'poly center',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3}),
+            // new G.GameShape('polygon',{name:'poly center mirrored',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3,hScale:-1}),
+            // new G.GameShape('polygon',{name:'poly right',level:6,dx:200, coords:[-100,-5,10,-10,30,30],fill:'red',rotation:1}),
+            // new G.GameShape('line',{level:6, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'black',lineWidth:50,}),
+            // new G.GameShape('line',{level:7, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'red',lineWidth:2,}),
+            // new G.GameImage('frog.png',{name:'frog1',dy:100,level:0,width:100,height:100,rotation:0}),
+            // new G.GameImage('frog.png',{name:'frog3',dy:100,level:0,width:100,height:100,rotation:Math.PI}),
+            // new G.GameImage('frog.png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}),
+            // new G.GameGif('jump',{level:0,width:400,height:200,stagger:0}),
+            // new G.GameGif('jump',{level:0,width:400,height:200,stagger:0,hScale:-1}),
+            // new G.GameGif('colors',{level:-1,stagger:10,width:600,height:600}),
         ],
         {clickable:true,draggable:true, name:"test",level:5}
     )
     game.addElement(test)
 }
-// testDrawables()
+testDrawables()
 
 function testCollisions() {
-    const el1 = new GameElement(center.copy().add(new Point(100,0)),
+    const el1 = new G.GameElement(center.copy().add(new G.Point(100,0)),
         [
-            new GameShape('rectangle',{width:100,height:50,fill:'red',stroke:'black',level:0,rotation:0}),
+            new G.GameShape('rectangle',{width:100,height:50,fill:'red',stroke:'black',level:0,rotation:0}),
         ],
-        {clickable:true,draggable:true, name:"test1",level:5,hitboxes:[new GameHitbox(50)],hitboxVisible:true}
+        {clickable:true,draggable:true, name:"test1",level:5,hitboxes:[new G.GameHitbox(50)],hitboxVisible:true}
     )
     game.addElement(el1)
 
-    const el2 = new GameElement(center.copy().subtract(new Point(100,0)),
+    const el2 = new G.GameElement(center.copy().subtract(new G.Point(100,0)),
         [
-            new GameShape('rectangle',{width:100,height:50,fill:'red',stroke:'black',level:0,rotation:0}),
+            new G.GameShape('rectangle',{width:100,height:50,fill:'red',stroke:'black',level:0,rotation:0}),
         ],
-        {clickable:true,draggable:true, name:"test2",level:5,hitboxes:[new GameHitbox(50),new GameHitbox(20,-70)],hitboxVisible:true}
+        {clickable:true,draggable:true, name:"test2",level:5,hitboxes:[new G.GameHitbox(50),new G.GameHitbox(20,-70)],hitboxVisible:true}
     )
     game.addElement(el2)
 
@@ -417,31 +415,31 @@ function testCollisions() {
 // testCollisions()
 
 function testKeyboardInput() {
-    const player1 = new GameElement(center.subtract(new Point(100,0)),
-        [new GameShape('oval',{rX:50,rY:50,fill:'blue',name:"kruh"}),new GameText("1",{level: 1})],
+    const player1 = new G.GameElement(center.subtract(new G.Point(100,0)),
+        [new G.GameShape('oval',{rX:50,rY:50,fill:'blue',name:"kruh"}),new G.GameText("1",{level: 1})],
         {draggable:true}
     )
     game.addElement(player1)
-    const player2 = new GameElement(center.add(new Point(100,0)),
-        [new GameShape('oval',{rX:50,rY:50,fill:'red',name:"kruh"}),new GameText("2",{level: 1})],
+    const player2 = new G.GameElement(center.add(new G.Point(100,0)),
+        [new G.GameShape('oval',{rX:50,rY:50,fill:'red',name:"kruh"}),new G.GameText("2",{level: 1})],
         {draggable:true}
     )
     game.addElement(player2)
 
-    player1.addOnKeyHoldListener("w",()=>player1.move(new Point(0,-5)))
-    player1.addOnKeyHoldListener("a",()=>player1.move(new Point(-5,0)))
-    player1.addOnKeyHoldListener("s",()=>player1.move(new Point(0,5)))
-    player1.addOnKeyHoldListener("d",()=>player1.move(new Point(5,0)))
+    player1.addOnKeyHoldListener("w",()=>player1.move(new G.Point(0,-5)))
+    player1.addOnKeyHoldListener("a",()=>player1.move(new G.Point(-5,0)))
+    player1.addOnKeyHoldListener("s",()=>player1.move(new G.Point(0,5)))
+    player1.addOnKeyHoldListener("d",()=>player1.move(new G.Point(5,0)))
 
-    player2.addOnKeyHoldListener("ArrowUp",()=>player2.move(new Point(0,-5)))
-    player2.addOnKeyHoldListener("ArrowLeft",()=>player2.move(new Point(-5,0)))
-    player2.addOnKeyHoldListener("ArrowDown",()=>player2.move(new Point(0,5)))
-    player2.addOnKeyHoldListener("ArrowRight",()=>player2.move(new Point(5,0)))
+    player2.addOnKeyHoldListener("ArrowUp",()=>player2.move(new G.Point(0,-5)))
+    player2.addOnKeyHoldListener("ArrowLeft",()=>player2.move(new G.Point(-5,0)))
+    player2.addOnKeyHoldListener("ArrowDown",()=>player2.move(new G.Point(0,5)))
+    player2.addOnKeyHoldListener("ArrowRight",()=>player2.move(new G.Point(5,0)))
 
     player1.addOnKeyPressListener(" ",()=>player1.getChildByName("kruh").fill="random")
     player2.addOnKeyPressListener(" ",()=>player2.getChildByName("kruh").fill="random")
 }
-testKeyboardInput()
+// testKeyboardInput()
 
 function testConnectBoxes() {
     const coordsX = [100,500]
@@ -449,21 +447,21 @@ function testConnectBoxes() {
     const values = [["a","b","c"],["A","B","C"]]
     for (let i = 0; i < coordsX.length; i++) {
         for (let j = 0; j < coordsY.length; j++) {
-            const el = new GameElement(
-                new Point(coordsX.at(i),coordsY.at(j)),
+            const el = new G.GameElement(
+                new G.Point(coordsX.at(i),coordsY.at(j)),
                 [
-                    new GameShape('rectangle',{width:100,height:50,fill:"tan"}),
-                    new GameText(values.at(i).at(j),{level: 1}),
-                    new GameShape("line",{coords:[0,0,0,0],name:"line",level: 2,stroke:'black',lineWidth:2})
+                    new G.GameShape('rectangle',{width:100,height:50,fill:"tan"}),
+                    new G.GameText(values.at(i).at(j),{level: 1}),
+                    new G.GameShape("line",{coords:[0,0,0,0],name:"line",level: 2,stroke:'black',lineWidth:2})
                 ],
                 {clickable:true,draggable:true,stationary:true,name:values.at(i).at(j)}
             )
             game.addElement(el)
 
-            const line = new GameElement(
-                new Point(coordsX.at(i),coordsY.at(j)),
+            const line = new G.GameElement(
+                new G.Point(coordsX.at(i),coordsY.at(j)),
                 [
-                    new GameShape("line",{coords:[0,0,0,0],name:"line",stroke:'black',lineWidth:2})
+                    new G.GameShape("line",{coords:[0,0,0,0],name:"line",stroke:'black',lineWidth:2})
                 ],
                 {name:`line${values.at(i).at(j)}`,level: 2}
             )
@@ -477,11 +475,11 @@ function testConnectBoxes() {
             const element = game.getElementByName(letter)
             element.addOnClickListener(()=>{
                 const line = game.getElementByName(`line${letter}`).getChildByName("line")
-                line.setLine(new Point(0,0),game.shared.mousePos.subtract(element.center))
+                line.setLine(new G.Point(0,0),game.shared.mousePos.subtract(element.center))
             })
             element.addOnDragListener(()=>{
                 const line = game.getElementByName(`line${letter}`).getChildByName("line")
-                line.setLine(new Point(0,0),game.shared.mousePos.subtract(element.center))
+                line.setLine(new G.Point(0,0),game.shared.mousePos.subtract(element.center))
             })
             element.addOnFinishDraggingListener(async () => {
                 const target = await game.getElementAtPos(game.shared.mousePos)
@@ -489,12 +487,12 @@ function testConnectBoxes() {
                 // if on the same side or air
                 if (target === null || target.center.x === element.center.x) {
                     //return to original
-                    line.setLine(new Point(0,0),new Point(0,0))
+                    line.setLine(new G.Point(0,0),new G.Point(0,0))
                     return
                 }
 
                 //snap line
-                line.setLine(new Point(0,0),target.center.subtract(element.center))
+                line.setLine(new G.Point(0,0),target.center.subtract(element.center))
                 //color based on correctness
                 if (letter.toLowerCase() === target.name.toLowerCase()) {
                     line.stroke = 'green'
@@ -513,7 +511,7 @@ function testConnectBoxes() {
 // testConnectBoxes()
 
 function testTextInput() {
-    const input = new GameTextInput(new Point(300,300))
+    const input = new G.GameTextInput(new G.Point(300,300))
     game.addElement(input)
 
     let i = 1
@@ -528,18 +526,18 @@ function testTextInput() {
 // testTextInput()
 
 function testCopyDrawables() {
-    const gif = new GameGif('jump',{name:"gif",width:100,height:100,stagger:0})
-    const text = new GameText('text',{name:"text"})
-    const img = new GameImage('frog.png',{name:'img',width:100,height:100})
-    const shape = new GameShape('polygon',{name:'shape', coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3})
+    const gif = new G.GameGif('jump',{name:"gif",width:100,height:100,stagger:0})
+    const text = new G.GameText('text',{name:"text"})
+    const img = new G.GameImage('frog.png',{name:'img',width:100,height:100})
+    const shape = new G.GameShape('polygon',{name:'shape', coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3})
 
-    const topLeft = new GameElement(new Point(100,100),[],{})
+    const topLeft = new G.GameElement(new G.Point(100,100),[],{})
     game.addElement(topLeft)
-    const topRight = new GameElement(new Point(500,100),[],{})
+    const topRight = new G.GameElement(new G.Point(500,100),[],{})
     game.addElement(topRight)
-    const bottomLeft = new GameElement(new Point(100,500),[],{})
+    const bottomLeft = new G.GameElement(new G.Point(100,500),[],{})
     game.addElement(bottomLeft)
-    const bottomRight = new GameElement(new Point(500,500),[],{})
+    const bottomRight = new G.GameElement(new G.Point(500,500),[],{})
     game.addElement(bottomRight)
 
     const c1 = img.copy()
