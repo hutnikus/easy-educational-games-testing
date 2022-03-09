@@ -1,11 +1,11 @@
 const express = require("express")
-const http = require("http")
+// const http = require("http")
 
 const PORT = process.env.PORT || 3000
 const APP = express()
-const SERVER = http.createServer(APP)
-
-const G = require("easy-educational-games")
+// const SERVER = http.createServer(APP)
+//
+// const G = require("easy-educational-games")
 
 // //set public folder (this page)
 // APP.use(express.static("./public"))
