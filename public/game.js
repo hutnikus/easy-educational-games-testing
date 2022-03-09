@@ -386,7 +386,7 @@ function testDrawables() {
     )
     game.addElement(test)
 }
-testDrawables()
+// testDrawables()
 
 function testCollisions() {
     const el1 = new G.GameElement(center.copy().add(new G.Point(100,0)),
@@ -439,7 +439,7 @@ function testKeyboardInput() {
     player1.addOnKeyPressListener(" ",()=>player1.getChildByName("kruh").fill="random")
     player2.addOnKeyPressListener(" ",()=>player2.getChildByName("kruh").fill="random")
 }
-// testKeyboardInput()
+testKeyboardInput()
 
 function testConnectBoxes() {
     const coordsX = [100,500]
