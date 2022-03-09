@@ -4,6 +4,7 @@ import * as G from "../modules/index.js"
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
 
+
 const canvas = document.getElementById('game');
 canvas.width = 600;
 canvas.height = 600;
@@ -334,16 +335,16 @@ function moveClickedToTop() {
 
 //test function for G.GameCanvas (but also buttons)
 function testGameCanvas() {
-    const gCanvas = new G.GameCanvas(new G.Point(300,150),{width:200,height:200})
+    const gCanvas = new G.GameCanvas(new G.Point(300,200),{width:300,height:300})
     game.addElement(gCanvas)
 
     function changeColor(color) {
         gCanvas.stroke = color
     }
 
-    const redButton = new G.GameButton(new G.Point(150,450),{color:'red',text:'Červená'})
-    const greenButton = new G.GameButton(new G.Point(300,450),{color:'green',text:'Zelená'})
-    const blueButton = new G.GameButton(new G.Point(450,450),{color:'blue',text:'Modrá'})
+    const redButton = new G.GameButton(new G.Point(150,550),{color:'red',text:'Červená'})
+    const greenButton = new G.GameButton(new G.Point(300,550),{color:'green',text:'Zelená'})
+    const blueButton = new G.GameButton(new G.Point(450,550),{color:'blue',text:'Modrá'})
     game.addElement(redButton)
     game.addElement(greenButton)
     game.addElement(blueButton)
@@ -351,13 +352,13 @@ function testGameCanvas() {
     greenButton.addOnButtonPressListener(changeColor,'green')
     blueButton.addOnButtonPressListener(changeColor,'blue')
 
-    const clearButton = new G.GameButton(new G.Point(300,375),{text:'Zmaž'})
+    const clearButton = new G.GameButton(new G.Point(300,450),{text:'Zmaž'})
     game.addElement(clearButton)
     clearButton.addOnButtonPressListener(()=>gCanvas.clear())
 
     setInterval(()=>rotateElement(gCanvas),20)
 }
-// testGameCanvas()
+testGameCanvas()
 
 // uncomment this to test drawables
 function testDrawables() {
@@ -439,7 +440,7 @@ function testKeyboardInput() {
     player1.addOnKeyPressListener(" ",()=>player1.getChildByName("kruh").fill="random")
     player2.addOnKeyPressListener(" ",()=>player2.getChildByName("kruh").fill="random")
 }
-testKeyboardInput()
+// testKeyboardInput()
 
 function testConnectBoxes() {
     const coordsX = [100,500]

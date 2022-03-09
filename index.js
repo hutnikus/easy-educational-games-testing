@@ -13,6 +13,9 @@ APP.use(express.static("./public"))
 APP.use("/modules",express.static(G.modulesPath))
 
 APP.set("port",PORT)
+APP.listen(PORT,"0.0.0.0",()=>{
+    console.log('Listening to port:  ' + 3000);
+})
 
 // APP.get('/', (req, res) => {
 //     res.send("GET Request Called")
@@ -25,5 +28,5 @@ APP.set("port",PORT)
 
 //todo socket.io server
 
-SERVER.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+// SERVER.listen(PORT, () => console.log(`Server running on port ${PORT}`))
 
