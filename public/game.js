@@ -1,4 +1,10 @@
+
+// first import is for the page to be used (uncomment when testing code)
 import {Game, GameElement, GameShape, GameText, GameImage, GameGif, Point, GameCanvas, GameButton, GameHitbox, GameTextInput} from "../modules/index.js"
+
+// second import is for typing (includes the library for code completion), but won't work on the page
+// import {Game, GameElement, GameShape, GameText, GameImage, GameGif, Point, GameCanvas, GameButton, GameHitbox, GameTextInput} from "../../easy-educational-games/public/modules/index.js"
+
 
 const canvas = document.getElementById('game');
 canvas.width = 600;
@@ -35,13 +41,13 @@ function isInside() {
 // isInside()
 
 // satellites that orbit each other and draw their path on canvas
-function inspiro() {
+function spirograph() {
 
     // center
     let lastPos = new Point(300,300)
     let drawing = true
 
-    const petals = -2
+    const petals = 3
     const satellites = 4
     const angleDif = 4/6
     const startAngle = -Math.PI/2
@@ -166,7 +172,7 @@ function inspiro() {
 
     document.addEventListener('keypress',(ev => keypress(ev)))
 }
-// inspiro()
+// spirograph()
 
 // test drag and drop function
 function dragDrop() {
@@ -361,22 +367,22 @@ function testDrawables() {
         [
             new GameText('text',{level:10,dx:-100,rotation:-0.3}),
             new GameText('text',{level:10,dx:100,rotation:-0.3,hScale:-1}),
-            new GameShape('rectangle',{width:100,height:50,dx:-100,fill:'red',stroke:'black',level:0,rotation:0}),
-            new GameShape('rectangle',{width:100,height:200,stroke:'black',fill:'red',lineWidth:2,level:1,rotation:0.3}),
-            new GameText('level1',{level:1}),
-            new GameShape('oval',{rX:100,rY:50,fill:'red',level:1,stroke:'black',lineWidth:20,rotation:Math.PI/2}),
-            new GameShape('oval',{rX:50,rY:20,dx:200, dy:200,fill:'blue',level:1,rotation:0.4}),
-            new GameShape('polygon',{name:'poly center',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3}),
-            new GameShape('polygon',{name:'poly center mirrored',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3,hScale:-1}),
-            new GameShape('polygon',{name:'poly right',level:6,dx:200, coords:[-100,-5,10,-10,30,30],fill:'red',rotation:1}),
-            new GameShape('line',{level:6, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'black',lineWidth:50,}),
-            new GameShape('line',{level:7, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'red',lineWidth:2,}),
-            new GameImage('frog.png',{name:'frog1',dy:100,level:0,width:100,height:100,rotation:0}),
-            new GameImage('frog.png',{name:'frog3',dy:100,level:0,width:100,height:100,rotation:Math.PI}),
-            new GameImage('frog.png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}),
-            new GameGif('jump',{level:0,width:400,height:200,stagger:0}),
-            new GameGif('jump',{level:0,width:400,height:200,stagger:0,hScale:-1}),
-            new GameGif('colors',{level:-1,stagger:10,width:600,height:600}),
+            // new GameShape('rectangle',{width:100,height:50,dx:-100,fill:'red',stroke:'black',level:0,rotation:0}),
+            // new GameShape('rectangle',{width:100,height:200,stroke:'black',fill:'red',lineWidth:2,level:1,rotation:0.3}),
+            // new GameText('level1',{level:1}),
+            // new GameShape('oval',{rX:100,rY:50,fill:'red',level:1,stroke:'black',lineWidth:20,rotation:Math.PI/2}),
+            // new GameShape('oval',{rX:50,rY:20,dx:200, dy:200,fill:'blue',level:1,rotation:0.4}),
+            // new GameShape('polygon',{name:'poly center',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3}),
+            // new GameShape('polygon',{name:'poly center mirrored',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3,hScale:-1}),
+            // new GameShape('polygon',{name:'poly right',level:6,dx:200, coords:[-100,-5,10,-10,30,30],fill:'red',rotation:1}),
+            // new GameShape('line',{level:6, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'black',lineWidth:50,}),
+            // new GameShape('line',{level:7, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'red',lineWidth:2,}),
+            // new GameImage('frog.png',{name:'frog1',dy:100,level:0,width:100,height:100,rotation:0}),
+            // new GameImage('frog.png',{name:'frog3',dy:100,level:0,width:100,height:100,rotation:Math.PI}),
+            // new GameImage('frog.png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}),
+            // new GameGif('jump',{level:0,width:400,height:200,stagger:0}),
+            // new GameGif('jump',{level:0,width:400,height:200,stagger:0,hScale:-1}),
+            // new GameGif('colors',{level:-1,stagger:10,width:600,height:600}),
         ],
         {clickable:true,draggable:true, name:"test",level:5}
     )
@@ -435,7 +441,7 @@ function testKeyboardInput() {
     player1.addOnKeyPressListener(" ",()=>player1.getChildByName("kruh").fill="random")
     player2.addOnKeyPressListener(" ",()=>player2.getChildByName("kruh").fill="random")
 }
-// testKeyboardInput()
+testKeyboardInput()
 
 function testConnectBoxes() {
     const coordsX = [100,500]
@@ -516,6 +522,7 @@ function testTextInput() {
     input.addOnEnterTextListener(()=> {
         i += 1
         input.message = `Message ${i}`
+        console.log(input.text)
     })
 }
 // testTextInput()
@@ -547,4 +554,4 @@ function testCopyDrawables() {
     bottomLeft.addChild(c3)
     bottomRight.addChild(c4)
 }
-testCopyDrawables()
+// testCopyDrawables()
