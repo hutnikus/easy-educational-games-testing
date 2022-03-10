@@ -4,7 +4,6 @@ import * as G from "../modules/index.js"
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
 
-
 const canvas = document.getElementById('game');
 canvas.width = 600;
 canvas.height = 600;
