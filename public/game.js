@@ -15,6 +15,8 @@ const center = new G.Point(
 
 const game = new G.Game(canvas);
 
+let loadedFunction = false
+
 
 function checkCollisions(obj) {
     const collisions = game.checkCollisions(obj).map((obj)=>obj.name)
@@ -23,6 +25,14 @@ function checkCollisions(obj) {
 
 function rotateElement(el) {
     el.rotation += 0.01
+}
+
+function createHTMLbutton(text,callback) {
+    const button = document.createElement('button')
+    button.innerText = text
+    button.addEventListener('click', callback)
+    document.body.appendChild(button)
+    return button
 }
 
 // test code to check if area is inside an element
@@ -40,6 +50,7 @@ function isInside() {
 
 // satellites that orbit each other and draw their path on canvas
 function spirograph() {
+    game.clear()
 
     // center
     let lastPos = new G.Point(300,300)
@@ -212,6 +223,8 @@ function dragDrop() {
 
 // colorful circle objects to test clicking or drawing
 function pogs() {
+    game.clear()
+
     const element1 = new G.GameElement(new G.Point(250, 250),
         [
             new G.GameText('1', {level: 2}),
@@ -334,16 +347,18 @@ function moveClickedToTop() {
 
 //test function for G.GameCanvas (but also buttons)
 function testGameCanvas() {
-    const gCanvas = new G.GameCanvas(new G.Point(300,200),{width:300,height:300})
+    game.clear()
+
+    const gCanvas = new G.GameCanvas(new G.Point(300,200),{width:300,height:300,stroke:"red"})
     game.addElement(gCanvas)
 
     function changeColor(color) {
         gCanvas.stroke = color
     }
 
-    const redButton = new G.GameButton(new G.Point(150,550),{color:'red',text:'Červená'})
-    const greenButton = new G.GameButton(new G.Point(300,550),{color:'green',text:'Zelená'})
-    const blueButton = new G.GameButton(new G.Point(450,550),{color:'blue',text:'Modrá'})
+    const redButton = new G.GameButton(new G.Point(150,550),{color:'red',text:'Red'})
+    const greenButton = new G.GameButton(new G.Point(300,550),{color:'green',text:'Green'})
+    const blueButton = new G.GameButton(new G.Point(450,550),{color:'blue',text:'Blue'})
     game.addElement(redButton)
     game.addElement(greenButton)
     game.addElement(blueButton)
@@ -351,13 +366,13 @@ function testGameCanvas() {
     greenButton.addOnButtonPressListener(changeColor,'green')
     blueButton.addOnButtonPressListener(changeColor,'blue')
 
-    const clearButton = new G.GameButton(new G.Point(300,450),{text:'Zmaž'})
+    const clearButton = new G.GameButton(new G.Point(300,450),{text:'Erase'})
     game.addElement(clearButton)
     clearButton.addOnButtonPressListener(()=>gCanvas.clear())
 
     setInterval(()=>rotateElement(gCanvas),20)
 }
-testGameCanvas()
+// testGameCanvas()
 
 // uncomment this to test drawables
 function testDrawables() {
@@ -442,35 +457,37 @@ function testKeyboardInput() {
 // testKeyboardInput()
 
 function testConnectBoxes() {
+    game.clear()
+
     const coordsX = [100,500]
     const coordsY = [100,300,500]
     const values = [["a","b","c"],["A","B","C"]]
     for (let i = 0; i < coordsX.length; i++) {
         for (let j = 0; j < coordsY.length; j++) {
             const el = new G.GameElement(
-                new G.Point(coordsX.at(i),coordsY.at(j)),
+                new G.Point(coordsX[i],coordsY[j]),
                 [
                     new G.GameShape('rectangle',{width:100,height:50,fill:"tan"}),
-                    new G.GameText(values.at(i).at(j),{level: 1}),
+                    new G.GameText(values[i][j],{level: 1}),
                     new G.GameShape("line",{coords:[0,0,0,0],name:"line",level: 2,stroke:'black',lineWidth:2})
                 ],
-                {clickable:true,draggable:true,stationary:true,name:values.at(i).at(j)}
+                {clickable:true,draggable:true,stationary:true,name:values[i][j]}
             )
             game.addElement(el)
 
             const line = new G.GameElement(
-                new G.Point(coordsX.at(i),coordsY.at(j)),
+                new G.Point(coordsX[i],coordsY[j]),
                 [
                     new G.GameShape("line",{coords:[0,0,0,0],name:"line",stroke:'black',lineWidth:2})
                 ],
-                {name:`line${values.at(i).at(j)}`,level: 2}
+                {name:`line${values[i][j]}`,level: 2}
             )
             game.addElement(line)
         }
     }
     for (let i = 0; i < coordsX.length; i++) {
         for (let j = 0; j < coordsY.length; j++) {
-            const letter = values.at(i).at(j)
+            const letter = values[i][j]
 
             const element = game.getElementByName(letter)
             element.addOnClickListener(()=>{
@@ -511,6 +528,8 @@ function testConnectBoxes() {
 // testConnectBoxes()
 
 function testTextInput() {
+    game.clear()
+
     const input = new G.GameTextInput(new G.Point(300,300))
     game.addElement(input)
 
@@ -553,3 +572,63 @@ function testCopyDrawables() {
     bottomRight.addChild(c4)
 }
 // testCopyDrawables()
+
+function testCopyElements() {
+    const redButton = new G.GameButton(new G.Point(300,300),{color:'red',text:'Červená'})
+    redButton.addOnButtonPressListener(()=>console.log("center"))
+    game.addElement(redButton)
+
+    const copyButton = redButton.copy()
+    copyButton.center = new G.Point(100,100)
+    copyButton.addOnButtonPressListener(()=>console.log("topleft"))
+    game.addElement(copyButton)
+}
+// testCopyElements()
+
+function testSound() {
+    game.clear()
+
+    const startButton = new G.GameButton(new G.Point(300,100),{color:'lightblue',text:'PLAY'})
+    game.addElement(startButton)
+    const pauseButton = new G.GameButton(new G.Point(300,300),{color:'lightgreen',text:'PAUSE'})
+    game.addElement(pauseButton)
+    const stopButton = new G.GameButton(new G.Point(300,500),{color:'red',text:'STOP'})
+    game.addElement(stopButton)
+
+    const sound = new Audio("../resources/rick_roll.mp3")
+
+    startButton.addOnButtonPressListener(()=>sound.play())
+    pauseButton.addOnButtonPressListener(()=>sound.pause())
+    stopButton.addOnButtonPressListener(()=> {
+        sound.pause()
+        sound.currentTime = 0
+    })
+
+    game.addOnClearListener(()=>{
+        sound.pause()
+        sound.currentTime = 0
+    })
+}
+testSound()
+
+function testClear() {
+    const clearButton = document.createElement('button')
+    clearButton.innerText = 'Reset Game'
+    clearButton.addEventListener('click', () => {
+        game.clear()
+        loadedFunction = false
+    })
+    document.body.appendChild(clearButton)
+}
+// testClear()
+
+function testFunctionCallsButtons() {
+    createHTMLbutton("CLEAR AREA",()=>game.clear())
+    createHTMLbutton("Canvas",testGameCanvas)
+    createHTMLbutton("Pogs",pogs)
+    createHTMLbutton("Spirograph",spirograph)
+    createHTMLbutton("Text Input",testTextInput)
+    createHTMLbutton("Connect Boxes",testConnectBoxes)
+    createHTMLbutton("Audio",testSound)
+}
+testFunctionCallsButtons()
