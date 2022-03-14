@@ -15,8 +15,6 @@ const center = new G.Point(
 
 const game = new G.Game(canvas);
 
-let loadedFunction = false
-
 
 function checkCollisions(obj) {
     const collisions = game.checkCollisions(obj).map((obj)=>obj.name)
@@ -430,14 +428,22 @@ function testCollisions() {
 // testCollisions()
 
 function testKeyboardInput() {
+    game.clear()
+
+    const collisionText = new G.GameElement(new G.Point(300,50),
+        [new G.GameText("NO COLLISION",{level: 10,color:"green",name:"text"})],
+        {}
+    )
+    game.addElement(collisionText)
+
     const player1 = new G.GameElement(center.subtract(new G.Point(100,0)),
         [new G.GameShape('oval',{rX:50,rY:50,fill:'blue',name:"kruh"}),new G.GameText("1",{level: 1})],
-        {draggable:true}
+        {draggable:true,hitboxes:[new G.GameHitbox(50)],hitboxVisible:true}
     )
     game.addElement(player1)
     const player2 = new G.GameElement(center.add(new G.Point(100,0)),
         [new G.GameShape('oval',{rX:50,rY:50,fill:'red',name:"kruh"}),new G.GameText("2",{level: 1})],
-        {draggable:true}
+        {draggable:true,hitboxes:[new G.GameHitbox(50)],hitboxVisible:true}
     )
     game.addElement(player2)
 
@@ -453,6 +459,32 @@ function testKeyboardInput() {
 
     player1.addOnKeyPressListener(" ",()=>player1.getChildByName("kruh").fill="random")
     player2.addOnKeyPressListener(" ",()=>player2.getChildByName("kruh").fill="random")
+
+    let colided = false
+
+    function collisionsForPlayer(player) {
+        const collisions = game.checkCollisions(player)
+        const textElement = collisionText.getChildByName("text")
+
+        if (collisions.length > 0 && !colided) {
+            textElement.color = "red"
+            textElement.text = "COLLISION"
+            console.log("COLLISION!")
+            colided = true
+        } else if (collisions.length === 0 && colided) {
+            textElement.color = "green"
+            textElement.text = "NO COLLISION"
+            console.log("COLLISION IS NO MORE!")
+            colided = false
+        }
+    }
+
+    player1.addOnMoveListener(()=>{
+        collisionsForPlayer(player1)
+    })
+    player2.addOnMoveListener(()=>{
+        collisionsForPlayer(player2)
+    })
 }
 // testKeyboardInput()
 
@@ -609,18 +641,86 @@ function testSound() {
         sound.currentTime = 0
     })
 }
-testSound()
+// testSound()
 
-function testClear() {
-    const clearButton = document.createElement('button')
-    clearButton.innerText = 'Reset Game'
-    clearButton.addEventListener('click', () => {
-        game.clear()
-        loadedFunction = false
-    })
-    document.body.appendChild(clearButton)
+function testComposite() {
+    const el1 = new G.GameElement(new G.Point(100,300),
+        [new G.GameImage('frog.png',{name:'img',width:100,height:100})],
+        {draggable:true,name:"image"}
+    )
+    const el2 = new G.GameElement(new G.Point(500,300),
+        [new G.GameShape('polygon',{name:'shape', coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3})],
+        {draggable:true,name:"poly"}
+    )
+    const el3 = new G.GameElement(new G.Point(300,500),
+        [new G.GameGif('jump',{name:"gif",width:100,height:100,stagger:2})],
+        {draggable:true,name:"jump"}
+    )
+    game.addElement(el1)
+    game.addElement(el2)
+    game.addElement(el3)
+
+    const composite = new G.GameComposite([],{draggable:true,clickable:true})
+    game.addElement(composite)
+
+    // const composite1 = new G.GameComposite([],{draggable:true,clickable:true})
+    // game.addElement(composite1)
+
+    composite.addElement(el1)
+    composite.addElement(el2)
+    // composite.addElement(el3)
+
+    // composite1.addElement(el2)
+    // composite1.addElement(el3)
+
+    composite.addOnKeyHoldListener("w",()=>composite.move(new G.Point(0,-5)))
+    composite.addOnKeyHoldListener("a",()=>composite.move(new G.Point(-5,0)))
+    composite.addOnKeyHoldListener("s",()=>composite.move(new G.Point(0,5)))
+    composite.addOnKeyHoldListener("d",()=>composite.move(new G.Point(5,0)))
+
+    // setInterval(()=>composite.rotateElements(composite.center.add(new G.Point(300,300)),0.05,true),50)
+
+    // composite.rotateElements(new G.Point(300,300),0.5)
+
+    // composite.reset()
+
+    // console.log(composite)
+
+    composite.addOnMoveListener(()=>console.log("moving"))
+    composite.addOnFinishDraggingListener(()=>console.log("finished dragging"))
 }
-// testClear()
+// testComposite()
+
+function testMoveToArea() {
+    game.clear()
+
+    const el = new G.GameElement(
+        new G.Point(300,300),
+        [
+            new G.GameShape("oval",{rX:50,rY:50,fill:"red"}),
+            new G.GameText("DRAG ME!",{name:"text",maxWidth:90})
+        ],
+        {draggable:true}
+    )
+    game.addElement(el)
+
+    el.addOnMoveListener(()=>{
+        const textElement = el.getChildByName("text")
+        textElement.text = ""
+
+        if (el.center.yWithin(0,200)) textElement.text += "TOP"
+        else if (el.center.yWithin(200, 400)) textElement.text += "CENTER"
+        else if (el.center.yWithin(400,600)) textElement.text += "BOTTOM"
+
+        if (el.center.xWithin(0,200)) textElement.text += " LEFT"
+        else if (el.center.xWithin(200, 400)) {
+            if (textElement.text !== "CENTER") textElement.text += " CENTER"
+        }
+        else if (el.center.xWithin(400,600)) textElement.text += " RIGHT"
+
+    })
+}
+testMoveToArea()
 
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
@@ -630,5 +730,7 @@ function testFunctionCallsButtons() {
     createHTMLbutton("Text Input",testTextInput)
     createHTMLbutton("Connect Boxes",testConnectBoxes)
     createHTMLbutton("Audio",testSound)
+    createHTMLbutton("WASD+Arrows",testKeyboardInput)
+    createHTMLbutton("Area Detection",testMoveToArea)
 }
 testFunctionCallsButtons()
