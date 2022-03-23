@@ -934,35 +934,8 @@ function frogFlyGame() {
     }
 
     const stagger = 5
-    let stg = {
-        up: 0,
-        down: 0,
-        left: 0,
-        right: 0,
-    }
-
-    frogElement.addOnKeyUpListener(function (event) {
-        if (event.key === "w") {
-            stg.up = 0
-        }
-        if (event.key === "a") {
-            stg.left = 0
-        }
-        if (event.key === "s") {
-            stg.down = 0
-        }
-        if (event.key === "d") {
-            stg.right = 0
-        }
-    })
 
     function moveFrog(event,dir) {
-        if (stg[dir]) {
-            stg[dir]--
-            return
-        } else {
-            stg[dir] = stagger
-        }
         const direction = {
             up: new G.Point(0,-1),
             down: new G.Point(0,1),
@@ -995,62 +968,25 @@ function frogFlyGame() {
         }
     }
 
-    frogElement.addOnKeyHoldListener("w",function (event) {moveFrog.call(this,event,"up")})
-    frogElement.addOnKeyHoldListener("s",function (event) {moveFrog.call(this,event,"down")})
-    frogElement.addOnKeyHoldListener("a",function (event) {moveFrog.call(this,event,"left")})
-    frogElement.addOnKeyHoldListener("d",function (event) {moveFrog.call(this,event,"right")})
+    frogElement.addOnKeyHoldListener("w",function (event) {moveFrog.call(this,event,"up")},stagger)
+    frogElement.addOnKeyHoldListener("s",function (event) {moveFrog.call(this,event,"down")},stagger)
+    frogElement.addOnKeyHoldListener("a",function (event) {moveFrog.call(this,event,"left")},stagger)
+    frogElement.addOnKeyHoldListener("d",function (event) {moveFrog.call(this,event,"right")},stagger)
 
-    const upArrowElement = game.createElement({clickable:true,draggable:true,stationary:true})
-    upArrowElement.setPosition(300,25)
-    upArrowElement.createShape("polygon",{coords:[0,-25,-100,25,100,25]})
+    const arrows = [    {direction: "up", position: [300,25], coords: [0,-25,-100,25,100,25]},
+                        {direction: "left", position: [25,300], coords: [-25,0,25,-100,25,100]},
+                        {direction: "down", position: [300,575], coords: [0,25,-100,-25,100,-25]},
+                        {direction: "right", position: [575,300], coords: [25,0,-25,-100,-25,100]}    ]
 
-    const leftArrowElement = game.createElement({clickable:true,draggable:true,stationary:true})
-    leftArrowElement.setPosition(25,300)
-    leftArrowElement.createShape("polygon",{coords:[-25,0,25,-100,25,100]})
+    for (const arrow of arrows) {
+        const element = game.createElement({holdable:true})
+        element.setPosition(...arrow.position)
+        element.createShape("polygon",{coords:arrow.coords})
 
-    const downArrowElement = game.createElement({clickable:true,draggable:true,stationary:true})
-    downArrowElement.setPosition(300,575)
-    downArrowElement.createShape("polygon",{coords:[0,25,-100,-25,100,-25]})
-
-    const rightArrowElement = game.createElement({clickable:true,draggable:true,stationary:true})
-    rightArrowElement.setPosition(575,300)
-    rightArrowElement.createShape("polygon",{coords:[25,0,-25,-100,-25,100]})
-
-    const intervals = {
-        up: undefined,
-        down: undefined,
-        left: undefined,
-        right: undefined
+        element.addOnMouseHoldListener(()=> {
+            moveFrog.call(frogElement,undefined,arrow.direction)
+        },stagger)
     }
-
-    upArrowElement.addOnClickListener(()=> {
-        moveFrog.call(frogElement,undefined,"up")
-        intervals.up = setInterval(()=>moveFrog.call(frogElement,undefined,"up"),20)
-    })
-    upArrowElement.addOnFinishDraggingListener(()=> {
-        clearInterval(intervals.up)
-    })
-    downArrowElement.addOnClickListener(()=> {
-        moveFrog.call(frogElement,undefined,"down")
-        intervals.down = setInterval(()=>moveFrog.call(frogElement,undefined,"down"),20)
-    })
-    downArrowElement.addOnFinishDraggingListener(()=> {
-        clearInterval(intervals.down)
-    })
-    leftArrowElement.addOnClickListener(()=> {
-        moveFrog.call(frogElement,undefined,"left")
-        intervals.left = setInterval(()=>moveFrog.call(frogElement,undefined,"left"),20)
-    })
-    leftArrowElement.addOnFinishDraggingListener(()=> {
-        clearInterval(intervals.left)
-    })
-    rightArrowElement.addOnClickListener(()=> {
-        moveFrog.call(frogElement,undefined,"right")
-        intervals.right = setInterval(()=>moveFrog.call(frogElement,undefined,"right"),20)
-    })
-    rightArrowElement.addOnFinishDraggingListener(()=> {
-        clearInterval(intervals.right)
-    })
 
     const cranes = []
     function updateCranes(add=true) {
@@ -1095,19 +1031,187 @@ function frogFlyGame() {
         updateCranes(false)
     })
 }
-frogFlyGame()
+// frogFlyGame()
+
+function testElementHold() {
+    const el = game.createElement({holdable:true})
+    el.createShape("rectangle")
+
+    el.addOnMouseHoldListener(function () {
+        console.log("holding")
+    })
+}
+// testElementHold()
+
+function testRangeSlider() {
+    game.clear()
+
+    const slider1 = game.createRangeSlider({color:"blue"})
+    slider1.setPosition(300,100)
+    const slider2 = game.createRangeSlider()
+    slider2.setValue(0)
+    const slider3 = game.createRangeSlider()
+    slider3.setPosition(300,500)
+
+    slider1.addOnChangeListener(function () {
+        slider2.width = (this.getValue() * 600) || 1
+    })
+
+    slider2.addOnChangeListener(function () {
+        slider3.rotation = this.getValue() * Math.PI * 2
+    })
+
+    slider3.addOnChangeListener(function () {
+        this.color = "random"
+    })
+}
+// testRangeSlider()
+
+function scalesGame() {
+    game.clear()
+
+    const scaleBase = game.createElement()
+    scaleBase.setPosition(300,100)
+    scaleBase.createShape("line", {coords:[0,0,0,300],stroke:"black"})
+    scaleBase.createShape("line", {coords:[-50,300,50,300],stroke:"black"})
+
+    const scaleArm = game.createElement()
+    scaleArm.setPosition(...scaleBase.center.asArray())
+    scaleArm.createShape("line", {coords:[-200,0,200,0],stroke:"black"})
+
+    const leftBucketShape = game.createElement()
+    leftBucketShape.setPosition(...scaleBase.center.subtract(new G.Point(200,0)).asArray())
+    leftBucketShape.createShape("line", {coords:[0,0,0,50,-50,150,50,150,0,50],stroke:"black"})
+
+    const rightBucketShape = game.copyElement(leftBucketShape)
+    rightBucketShape.setPosition(...scaleBase.center.add(new G.Point(200,0)).asArray())
+
+    const cardOnScale = game.createElement()
+    cardOnScale.setPosition(...leftBucketShape.center.add(new G.Point(0,135)).asArray())
+    cardOnScale.createShape("rectangle",{width:30,height:30,fill:"tan",stroke:"black"})
+    cardOnScale.createText("15",{name:"text"})
+
+    const leftBucket = game.createComposite()
+    leftBucket.setPosition(...leftBucketShape.center.asArray())
+    leftBucket.addElements(leftBucketShape,cardOnScale)
+
+    const rightBucket = game.createComposite()
+    rightBucket.setPosition(...rightBucketShape.center.asArray())
+    rightBucket.addElements(rightBucketShape)
+
+    const buckets = game.createComposite()
+    buckets.addElements(leftBucket,rightBucket)
+
+    let currentRotation = 0
+    let leftBucketValue = 15
+    let rightBucketValue = 0
+
+    function setScaleAngle(percent) {
+        const angle0 = -0.4
+        const angle = (angle0*-2 * percent) + angle0
+        scaleArm.rotation = angle
+        buckets.rotateElements(scaleBase.center,-currentRotation,true)
+        buckets.rotateElements(scaleBase.center,angle,true)
+        currentRotation = angle
+    }
+
+    setScaleAngle(0)
+
+    // const slider = game.createRangeSlider({width:300,visible:true})
+    // slider.setPosition(300,500)
+    // slider.addOnChangeListener(function () {
+    //     setScaleAngle(this.getValue())
+    // })
+
+    const winText = game.createElement({level:10}).createText("",{font:"100px arial",color:"green"})
+
+    function winCondition() {
+        if (leftBucketValue > rightBucketValue) {
+            return
+        }
+        if (leftBucketValue === rightBucketValue) {
+            // win
+            winText.text = "YOU WIN!"
+            winText.color = "green"
+        } else if (leftBucketValue < rightBucketValue) {
+            // lose
+            winText.text = "YOU LOSE!"
+            winText.color = "red"
+        }
+        numberCards.forEach(card=>{
+            card.draggable = false
+        })
+    }
+
+    const numberCards = []
+
+    for (let i = 1; i < 10; i++) {
+        const numberCard = game.createElement({draggable:true})
+        numberCards.push(numberCard)
+        numberCard.setPosition(50+i*50,550)
+        numberCard.createShape("rectangle",{width:30,height:30,fill:"tan",stroke:"black"})
+        numberCard.createText(`${i}`)
+        numberCard.addOnFinishDraggingListener(function () {
+            const leftBorder = rightBucket.center.x-35
+            const topBorder = rightBucket.center.y+120
+            const cardCenter = this.center
+
+            if (cardCenter.xWithin(leftBorder,leftBorder+70) && cardCenter.yWithin(topBorder,topBorder+30)) {
+                this.setPosition(this.center.x,rightBucket.center.y+135)
+                rightBucket.addElement(this)
+                rightBucketValue += i
+                setScaleAngle((((leftBucketValue+rightBucketValue)/2)/leftBucketValue)-0.5)
+
+                winCondition()
+            } else {
+                this.setPosition(50+i*50,550)
+            }
+        })
+    }
+
+    function resetGame(num) {
+        // set left bucket
+        cardOnScale.getChildByName("text").text = ""+ num
+        leftBucketValue = num
+        // clear right bucket
+        rightBucket.reset()
+        rightBucket.addElement(rightBucketShape)
+        rightBucketValue = 0
+        // return cards to og positions
+        for (const card of numberCards) {
+            card.setPosition(0,0)
+            card.draggable = true
+            card.finishDragging()
+        }
+        // set original angle
+        setScaleAngle(0)
+        // clear win text
+        winText.text = ""
+    }
+
+    const againButton = game.createButton({text:"TRY AGAIN",color:"yellow"})
+    againButton.setPosition(100,450)
+    againButton.addOnButtonPressListener(function () {resetGame(leftBucketValue)})
+
+    const newGameButton = game.createButton({text:"NEW GAME",color:"green"})
+    newGameButton.setPosition(500,450)
+    newGameButton.addOnButtonPressListener(function () {resetGame(Math.floor(Math.random()*20+5))})
+}
+scalesGame()
 
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
-    createHTMLbutton("Canvas",testGameCanvas)
     createHTMLbutton("Pogs",pogs)
-    createHTMLbutton("Spirograph",spirograph)
-    createHTMLbutton("Text Input",testTextInput)
     createHTMLbutton("Connect Boxes",testConnectBoxes)
+    createHTMLbutton("Text Input",testTextInput)
+    createHTMLbutton("Element Composite",testComposite)
+    createHTMLbutton("Range Slider",testRangeSlider)
+    createHTMLbutton("Canvas",testGameCanvas)
+    createHTMLbutton("Spirograph",spirograph)
     createHTMLbutton("Audio",testSound)
     createHTMLbutton("WASD+Arrows",testKeyboardInput)
     createHTMLbutton("Area Detection",testMoveToArea)
-    createHTMLbutton("Element Composite",testComposite)
     createHTMLbutton("Frog Game",frogFlyGame)
+    createHTMLbutton("Scales Game",scalesGame)
 }
 testFunctionCallsButtons()
