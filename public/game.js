@@ -3,7 +3,6 @@ import * as G from "../modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
-
 const canvas = document.getElementById('game');
 canvas.width = 600;
 canvas.height = 600;
@@ -14,7 +13,6 @@ const center = new G.Point(
 )
 
 const game = new G.Game(canvas);
-
 
 function checkCollisions(obj) {
     const collisions = game.checkCollisions(obj).map((obj)=>obj.name)
@@ -54,7 +52,7 @@ function spirograph() {
     let lastPos = new G.Point(300,300)
     let drawing = true
 
-    const petals = 3
+    const petals = 6
     const satellites = 4
     const angleDif = 4/6
     const startAngle = -Math.PI/2
@@ -227,25 +225,29 @@ function dragDrop() {
 function pogs() {
     game.clear()
 
-    const element1 = game.createElement({clickable: true, draggable:true, name: '1-red', level: 10,hitboxes:[new G.GameHitbox(100)],hitboxVisible:true})
+    const element1 = game.createElement({clickable: true, draggable:true, name: '1-red', level: 10,hitboxVisible:true})
+    element1.addHitbox(100)
     element1.setPosition(250,250)
-    element1.addChild(new G.GameText('1', {level: 2}))
-    element1.addChild(new G.GameShape('oval', {rX: 100,rY: 100, fill: 'red', level: 1, stroke: 'black', lineWidth: 20}))
+    element1.createText('1', {level: 2})
+    element1.createShape('oval', {rX: 100,rY: 100, fill: 'red', level: 1, stroke: 'black', lineWidth: 20})
 
-    const element2 = game.createElement({clickable: true, draggable:true, name: '2-blue', level: 10,hitboxes:[new G.GameHitbox(100)],hitboxVisible:true})
+    const element2 = game.createElement({clickable: true, draggable:true, name: '2-blue', level: 10,hitboxVisible:true})
+    element2.addHitbox(100)
     element2.setPosition(350,250)
-    element2.addChild(new G.GameText('2', {level: 2}))
-    element2.addChild(new G.GameShape('oval', {rX: 100,rY: 100, fill: 'blue', level: 1, stroke: 'black', lineWidth: 20}))
+    element2.createText('2', {level: 2})
+    element2.createShape('oval', {rX: 100,rY: 100, fill: 'blue', level: 1, stroke: 'black', lineWidth: 20})
 
-    const element3 = game.createElement({clickable: true, draggable:true, name: '3-green', level: 10,hitboxes:[new G.GameHitbox(100)],hitboxVisible:true})
+    const element3 = game.createElement({clickable: true, draggable:true, name: '3-green', level: 10,hitboxVisible:true})
+    element3.addHitbox(100)
     element3.setPosition(250,350)
-    element3.addChild(new G.GameText('3', {level: 2}))
-    element3.addChild(new G.GameShape('oval', {rX: 100,rY: 100, fill: 'green', level: 1, stroke: 'black', lineWidth: 20}))
+    element3.createText('3', {level: 2})
+    element3.createShape('oval', {rX: 100,rY: 100, fill: 'green', level: 1, stroke: 'black', lineWidth: 20})
 
-    const element4 = game.createElement({clickable: true, draggable:true, name: '4-yellow', level: 10,hitboxes:[new G.GameHitbox(100)],hitboxVisible:true})
+    const element4 = game.createElement({clickable: true, draggable:true, name: '4-yellow', level: 10,hitboxVisible:true})
+    element4.addHitbox(100)
     element4.setPosition(350, 350)
-    element4.addChild(new G.GameText('3', {level: 2}))
-    element4.addChild(new G.GameShape('oval', {rX: 100,rY: 100, fill: 'yellow', level: 1, stroke: 'black', lineWidth: 20}))
+    element4.createText('3', {level: 2})
+    element4.createShape('oval', {rX: 100,rY: 100, fill: 'yellow', level: 1, stroke: 'black', lineWidth: 20})
 
     const elements = [element1,element2,element3,element4]
 
@@ -394,23 +396,19 @@ function testKeyboardInput() {
 
     const collisionText = game.createElement()
     collisionText.setPosition(300,50)
-    collisionText.addChild(new G.GameText("NO COLLISION",{level: 10,color:"green",name:"text"}))
+    const textElement = collisionText.createText("NO COLLISION",{level: 10,color:"green",name:"text"})
 
-    const player1 = game.createElement({pressable:true})
+    const player1 = game.createElement({pressable:true,draggable:true,hitboxVisible:true})
     player1.setPosition(200,300)
-    player1.addChild(new G.GameShape('oval',{rX:50,rY:50,fill:'blue',name:"kruh"}))
-    player1.addChild(new G.GameText("1",{level: 1}))
-    player1.draggable = true
+    player1.createShape('oval',{rX:50,rY:50,fill:'blue',name:"kruh"})
+    player1.createText("1",{level: 1})
     player1.addHitbox(50)
-    player1.hitboxVisible = true
 
-    const player2 = game.createElement({pressable:true})
+    const player2 = game.createElement({pressable:true,draggable:true,hitboxVisible:true})
     player2.setPosition(400,300)
-    player2.addChild(new G.GameShape('oval',{rX:50,rY:50,fill:'red',name:"kruh"}))
-    player2.addChild(new G.GameText("2",{level: 1}))
-    player2.draggable = true
+    player2.createShape('oval',{rX:50,rY:50,fill:'red',name:"kruh"})
+    player2.createText("2",{level: 1})
     player2.addHitbox(50)
-    player2.hitboxVisible = true
 
     player1.addOnKeyHoldListener("w",()=>player1.move(new G.Point(0,-speed)))
     player1.addOnKeyHoldListener("a",()=>player1.move(new G.Point(-speed,0)))
@@ -422,18 +420,16 @@ function testKeyboardInput() {
     player2.addOnKeyHoldListener("ArrowDown",()=>player2.move(new G.Point(0,speed)))
     player2.addOnKeyHoldListener("ArrowRight",()=>player2.move(new G.Point(speed,0)))
 
-    player1.addOnKeyPressListener(" ",()=> {
-        player1.getChildByName("kruh").fill = "random"
-    })
-    player2.addOnKeyPressListener(" ",()=> {
-        player2.getChildByName("kruh").fill = "random"
-    })
+    function setRandomFill() {
+        this.getChildByName("kruh").fill = "random"
+    }
+    player1.addOnKeyPressListener(" ",setRandomFill)
+    player2.addOnKeyPressListener(" ",setRandomFill)
 
     let colided = false
 
     function collisionsForPlayer(player) {
         const collisions = game.checkCollisions(player)
-        const textElement = collisionText.getChildByName("text")
 
         if (collisions.length > 0 && !colided) {
             textElement.color = "red"
@@ -630,20 +626,14 @@ function testCopyElements() {
 function testSound() {
     game.clear()
 
-    const startButton = game.createButton()
+    const startButton = game.createButton({color:"lightblue",text:"PLAY"})
     startButton.setPosition(300,100)
-    startButton.color = "lightblue"
-    startButton.text = "PLAY"
 
-    const pauseButton = game.createButton()
+    const pauseButton = game.createButton({color:"lightgreen",text:"PAUSE"})
     pauseButton.setPosition(300,300)
-    pauseButton.color = "lightgreen"
-    pauseButton.text = "PAUSE"
 
-    const stopButton = game.createButton()
+    const stopButton = game.createButton({color:"red",text:"STOP"})
     stopButton.setPosition(300,500)
-    stopButton.color = "red"
-    stopButton.text = "STOP"
 
     const sound = new Audio("../resources/rick_roll.mp3")
 
@@ -772,11 +762,13 @@ function testComposite() {
 function testMoveToArea() {
     game.clear()
 
-    const el = game.createElement()
+    const el = game.createElement({name: "movingElement"})
     el.setPosition(300,300)
     el.draggable = true
     el.addChild(new G.GameShape("oval",{rX:50,rY:50,fill:"red"}))
     el.addChild(new G.GameText("DRAG ME!",{name:"text",maxWidth:90}))
+
+
 
     el.addOnMoveListener(()=>{
         const textElement = el.getChildByName("text")
@@ -791,7 +783,6 @@ function testMoveToArea() {
             if (textElement.text !== "CENTER") textElement.text += " CENTER"
         }
         else if (el.center.xWithin(400,600)) textElement.text += " RIGHT"
-
     })
 }
 // testMoveToArea()
@@ -925,11 +916,11 @@ function frogFlyGame() {
     const grid = game.createGrid(50,50,500,500,10,10)
 
     const frogElement = game.createElement({pressable:true})
-    const frogImg = frogElement.createImage("frog.png",{width:grid.columnWidth(),height:grid.rowHeight()})
+    frogElement.createImage("frog.png",{width:grid.columnWidth(),height:grid.rowHeight()})
     grid.addElement(...grid.randomFreePosition().asArray(),frogElement)
 
     const flyElement = game.createElement({name:"fly"})
-    const flyGif = flyElement.createGif("fly",{width:grid.columnWidth(),height:grid.rowHeight(),stagger:2})
+    flyElement.createGif("fly",{width:grid.columnWidth(),height:grid.rowHeight(),stagger:2})
     grid.addElement(...grid.randomFreePosition().asArray(),flyElement)
 
     let score = 0
@@ -937,18 +928,9 @@ function frogFlyGame() {
     const scoreText = scoreElement.createText(`Score: ${score}`)
     scoreElement.setPosition(100,25)
 
-    function randomExcept(from,to,exclude) {
-        const num = Math.floor(Math.random() * (to - from)) + from
-        return (num === exclude) ? randomExcept(from,to,exclude) : num;
-    }
-
     function placeFly() {
         const freePos = grid.randomFreePosition()
-        if (flyElement.grid) {
-            grid.moveElement(...freePos.asArray(),flyElement)
-        } else {
-            grid.addElement(...freePos.asArray(), flyElement)
-        }
+        grid.placeElement(...freePos.asArray(), flyElement)
     }
 
     const stagger = 5
