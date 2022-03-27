@@ -9,8 +9,14 @@
 </head>
 <body>
 <div w3-include-html="/navbar.html"></div>
-Welcome to my page!
+<div id="gameSection">
+    <div id="gameDescription">
+        <p>The goal of the game is to connect pictures that relate to each other.</p>
+    </div>
+    <canvas id="game"></canvas>
+</div>
 </body>
 
 <script src="/includeHTML.js"></script>
+<script type="module" src="game.js"></script>
 </html>

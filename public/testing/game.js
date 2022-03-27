@@ -525,7 +525,7 @@ function testConnectBoxes() {
 function testTextInput() {
     game.clear()
 
-    const input = game.createTextInput()
+    const input = game.createTextInput({text:"Click Me!"})
     input.setPosition(300,300)
 
     let i = 1
@@ -1197,7 +1197,21 @@ function scalesGame() {
     newGameButton.setPosition(500,450)
     newGameButton.addOnButtonPressListener(function () {resetGame(Math.floor(Math.random()*20+5))})
 }
-scalesGame()
+// scalesGame()
+
+function testAnimateTo() {
+    game.clear()
+
+    const element = game.createElement()
+    element.setPosition(300,300)
+    element.createShape("oval")
+
+    canvas.addEventListener("mouseup",event=>{
+        const mousePos = game.getMousePos(event)
+        element.animateTo(mousePos,20)
+    })
+}
+testAnimateTo()
 
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
@@ -1213,5 +1227,6 @@ function testFunctionCallsButtons() {
     createHTMLbutton("Area Detection",testMoveToArea)
     createHTMLbutton("Frog Game",frogFlyGame)
     createHTMLbutton("Scales Game",scalesGame)
+    createHTMLbutton("Animate To",testAnimateTo)
 }
 testFunctionCallsButtons()
