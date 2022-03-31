@@ -33,7 +33,7 @@ function createHTMLbutton(text,callback) {
 
 // test code to check if area is inside an element
 function isInside() {
-    canvas.addEventListener('mousemove',async (event) => await game.drawInside(event))
+    canvas.addEventListener('mousemove',(event) => game.drawInside(event))
 
     document.addEventListener("keyup",(e)=>{
         if (e.code === "Space") {
@@ -268,9 +268,9 @@ function pogs() {
 
 // test display name of clicked object
 function displayClickedName() {
-    async function onClick(event) {
+    function onClick(event) {
         const mouse = game.getMousePos(event)
-        const clickedElement = await game.getElementAtPos(mouse)
+        const clickedElement = game.getElementAtPos(mouse)
 
         if (clickedElement !== null) {
             console.log(`Clicked element with name: "${clickedElement.name}"`)
@@ -283,9 +283,9 @@ function displayClickedName() {
 
 // test move clicked object to top
 function moveClickedToTop() {
-    async function onClick(event) {
+    function onClick(event) {
         const mouse = game.getMousePos(event)
-        const clickedElement = await game.getElementAtPos(mouse)
+        const clickedElement = game.getElementAtPos(mouse)
 
         if (clickedElement !== null) {
             const highestLevel = Math.max(...game.elements.map(el => el.level))
@@ -493,8 +493,8 @@ function testConnectBoxes() {
                 const line = game.getElementByName(`line${letter}`).getChildByName("line")
                 line.setLine(new G.Point(0,0),game.shared.mousePos.subtract(element.center))
             })
-            element.addOnFinishDraggingListener(async () => {
-                const target = await game.getElementAtPos(game.shared.mousePos)
+            element.addOnFinishDraggingListener(() => {
+                const target = game.getElementAtPos(game.shared.mousePos)
                 const line = game.getElementByName(`line${letter}`).getChildByName("line")
                 // if on the same side or air
                 if (target === null || target.center.x === element.center.x) {
@@ -635,7 +635,7 @@ function testSound() {
     const stopButton = game.createButton({color:"red",text:"STOP"})
     stopButton.setPosition(300,500)
 
-    const sound = new Audio("../resources/rick_roll.mp3")
+    const sound = new Audio("resources/rick_roll.mp3")
 
     startButton.addOnButtonPressListener(()=>sound.play())
     pauseButton.addOnButtonPressListener(()=>sound.pause())
@@ -827,7 +827,7 @@ function testListeners() {
 }
 // testListeners()
 
-async function testGrid() {
+function testGrid() {
     const grid = game.createGrid()
     grid.setPosition(100,100)
     grid.width = 400
@@ -908,130 +908,7 @@ async function testGrid() {
     })
 
 }
-// await testGrid()
-
-function frogFlyGame() {
-    game.clear()
-
-    const grid = game.createGrid(50,50,500,500,10,10)
-
-    const frogElement = game.createElement({pressable:true})
-    frogElement.createImage("frog.png",{width:grid.columnWidth(),height:grid.rowHeight()})
-    grid.addElement(...grid.randomFreePosition().asArray(),frogElement)
-
-    const flyElement = game.createElement({name:"fly"})
-    flyElement.createGif("fly",{width:grid.columnWidth(),height:grid.rowHeight(),stagger:2})
-    grid.addElement(...grid.randomFreePosition().asArray(),flyElement)
-
-    let score = 0
-    const scoreElement = game.createElement()
-    const scoreText = scoreElement.createText(`Score: ${score}`)
-    scoreElement.setPosition(100,25)
-
-    function placeFly() {
-        const freePos = grid.randomFreePosition()
-        grid.placeElement(...freePos.asArray(), flyElement)
-    }
-
-    const stagger = 5
-
-    function moveFrog(event,dir) {
-        const direction = {
-            up: new G.Point(0,-1),
-            down: new G.Point(0,1),
-            left: new G.Point(-1,0),
-            right: new G.Point(1,0)
-        }
-        const currentPos = grid.getPosFromPixels(...this.center.asArray())
-        const nextPos = currentPos.add(direction[dir])
-
-        try {
-            const element = grid.getElementAtPos(...nextPos.asArray())
-            if (element && element.name === "fly") {
-                //position is occupied
-                score++
-                scoreText.text = `Score: ${score}`
-                grid.removeElementAtPosition(...nextPos.asArray())
-                this.move(direction[dir])
-                placeFly()
-                updateCranes()
-            } else if (!element) {
-                this.move(direction[dir])
-            } else {
-                alert(`Congrats! You made it to ${score} points!`)
-                frogFlyGame()
-            }
-        } catch (e) {
-            if (!(e instanceof RangeError)) {
-                throw e
-            }
-        }
-    }
-
-    frogElement.addOnKeyHoldListener("w",function (event) {moveFrog.call(this,event,"up")},stagger)
-    frogElement.addOnKeyHoldListener("s",function (event) {moveFrog.call(this,event,"down")},stagger)
-    frogElement.addOnKeyHoldListener("a",function (event) {moveFrog.call(this,event,"left")},stagger)
-    frogElement.addOnKeyHoldListener("d",function (event) {moveFrog.call(this,event,"right")},stagger)
-
-    const arrows = [    {direction: "up", position: [300,25], coords: [0,-25,-100,25,100,25]},
-                        {direction: "left", position: [25,300], coords: [-25,0,25,-100,25,100]},
-                        {direction: "down", position: [300,575], coords: [0,25,-100,-25,100,-25]},
-                        {direction: "right", position: [575,300], coords: [25,0,-25,-100,-25,100]}    ]
-
-    for (const arrow of arrows) {
-        const element = game.createElement({holdable:true})
-        element.setPosition(...arrow.position)
-        element.createShape("polygon",{coords:arrow.coords})
-
-        element.addOnMouseHoldListener(()=> {
-            moveFrog.call(frogElement,undefined,arrow.direction)
-        },stagger)
-    }
-
-    const cranes = []
-    function updateCranes(add=true) {
-        if (add && score % 5 === 0) {
-            //pridaj
-            for (let i = 0; i < Math.floor(score/5); i++) {
-                const craneElement = game.createElement()
-                cranes.push(craneElement)
-                craneElement.createImage("crane.png",{width:grid.columnWidth(),height:grid.rowHeight()})
-
-                if (cranes.length >= grid.columns*grid.rows -2) {
-                    break
-                }
-            }
-        }
-        //nahodne usporiadaj
-        grid.removeElements(...cranes)
-        for (const crane of cranes) {
-            try {
-                const freePos = grid.randomFreePosition()
-                grid.addElement(freePos.x,freePos.y,crane)
-            } catch (e) {
-                if (e instanceof grid.FullError) {
-                    alert("Wow, you surely have too much time on your hand, nice!")
-                    break
-                }
-            }
-        }
-        if (cranes.length >= grid.columns*grid.rows -2) {
-            alert("Wow, you surely have too much time on your hand, nice!")
-        }
-    }
-
-    const shuffleButton = game.createButton({color:"skyblue",width:150,height:30,text:"scare the cranes"})
-    shuffleButton.rectangle.lineWidth = 1
-    shuffleButton.setPosition(500,25)
-    const sound = new Audio("../resources/croak.mp3")
-
-    shuffleButton.addOnButtonPressListener(()=>{
-        sound.time = 0
-        sound.play()
-        updateCranes(false)
-    })
-}
-// frogFlyGame()
+// testGrid()
 
 function testElementHold() {
     const el = game.createElement({holdable:true})
@@ -1067,148 +944,27 @@ function testRangeSlider() {
 }
 // testRangeSlider()
 
-function scalesGame() {
-    game.clear()
-
-    const scaleBase = game.createElement()
-    scaleBase.setPosition(300,100)
-    scaleBase.createShape("line", {coords:[0,0,0,300],stroke:"black"})
-    scaleBase.createShape("line", {coords:[-50,300,50,300],stroke:"black"})
-
-    const scaleArm = game.createElement()
-    scaleArm.setPosition(...scaleBase.center.asArray())
-    scaleArm.createShape("line", {coords:[-200,0,200,0],stroke:"black"})
-
-    const leftBucketShape = game.createElement()
-    leftBucketShape.setPosition(...scaleBase.center.subtract(new G.Point(200,0)).asArray())
-    leftBucketShape.createShape("line", {coords:[0,0,0,50,-50,150,50,150,0,50],stroke:"black"})
-
-    const rightBucketShape = game.copyElement(leftBucketShape)
-    rightBucketShape.setPosition(...scaleBase.center.add(new G.Point(200,0)).asArray())
-
-    const cardOnScale = game.createElement()
-    cardOnScale.setPosition(...leftBucketShape.center.add(new G.Point(0,135)).asArray())
-    cardOnScale.createShape("rectangle",{width:30,height:30,fill:"tan",stroke:"black"})
-    cardOnScale.createText("15",{name:"text"})
-
-    const leftBucket = game.createComposite()
-    leftBucket.setPosition(...leftBucketShape.center.asArray())
-    leftBucket.addElements(leftBucketShape,cardOnScale)
-
-    const rightBucket = game.createComposite()
-    rightBucket.setPosition(...rightBucketShape.center.asArray())
-    rightBucket.addElements(rightBucketShape)
-
-    const buckets = game.createComposite()
-    buckets.addElements(leftBucket,rightBucket)
-
-    let currentRotation = 0
-    let leftBucketValue = 15
-    let rightBucketValue = 0
-
-    function setScaleAngle(percent) {
-        const angle0 = -0.4
-        const angle = (angle0*-2 * percent) + angle0
-        scaleArm.rotation = angle
-        buckets.rotateElements(scaleBase.center,-currentRotation,true)
-        buckets.rotateElements(scaleBase.center,angle,true)
-        currentRotation = angle
-    }
-
-    setScaleAngle(0)
-
-    // const slider = game.createRangeSlider({width:300,visible:true})
-    // slider.setPosition(300,500)
-    // slider.addOnChangeListener(function () {
-    //     setScaleAngle(this.getValue())
-    // })
-
-    const winText = game.createElement({level:10}).createText("",{font:"100px arial",color:"green"})
-
-    function winCondition() {
-        if (leftBucketValue > rightBucketValue) {
-            return
-        }
-        if (leftBucketValue === rightBucketValue) {
-            // win
-            winText.text = "YOU WIN!"
-            winText.color = "green"
-        } else if (leftBucketValue < rightBucketValue) {
-            // lose
-            winText.text = "YOU LOSE!"
-            winText.color = "red"
-        }
-        numberCards.forEach(card=>{
-            card.draggable = false
-        })
-    }
-
-    const numberCards = []
-
-    for (let i = 1; i < 10; i++) {
-        const numberCard = game.createElement({draggable:true})
-        numberCards.push(numberCard)
-        numberCard.setPosition(50+i*50,550)
-        numberCard.createShape("rectangle",{width:30,height:30,fill:"tan",stroke:"black"})
-        numberCard.createText(`${i}`)
-        numberCard.addOnFinishDraggingListener(function () {
-            const leftBorder = rightBucket.center.x-35
-            const topBorder = rightBucket.center.y+120
-            const cardCenter = this.center
-
-            if (cardCenter.xWithin(leftBorder,leftBorder+70) && cardCenter.yWithin(topBorder,topBorder+30)) {
-                this.setPosition(this.center.x,rightBucket.center.y+135)
-                rightBucket.addElement(this)
-                rightBucketValue += i
-                setScaleAngle((((leftBucketValue+rightBucketValue)/2)/leftBucketValue)-0.5)
-
-                winCondition()
-            } else {
-                this.setPosition(50+i*50,550)
-            }
-        })
-    }
-
-    function resetGame(num) {
-        // set left bucket
-        cardOnScale.getChildByName("text").text = ""+ num
-        leftBucketValue = num
-        // clear right bucket
-        rightBucket.reset()
-        rightBucket.addElement(rightBucketShape)
-        rightBucketValue = 0
-        // return cards to og positions
-        for (const card of numberCards) {
-            card.setPosition(0,0)
-            card.draggable = true
-            card.finishDragging()
-        }
-        // set original angle
-        setScaleAngle(0)
-        // clear win text
-        winText.text = ""
-    }
-
-    const againButton = game.createButton({text:"TRY AGAIN",color:"yellow"})
-    againButton.setPosition(100,450)
-    againButton.addOnButtonPressListener(function () {resetGame(leftBucketValue)})
-
-    const newGameButton = game.createButton({text:"NEW GAME",color:"green"})
-    newGameButton.setPosition(500,450)
-    newGameButton.addOnButtonPressListener(function () {resetGame(Math.floor(Math.random()*20+5))})
-}
-// scalesGame()
-
 function testAnimateTo() {
     game.clear()
 
     const element = game.createElement()
     element.setPosition(300,300)
-    element.createShape("oval")
+    const oval = element.createShape("oval")
 
-    canvas.addEventListener("mouseup",event=>{
-        const mousePos = game.getMousePos(event)
+    game.addOnMouseDownListener(function (event) {
+        const mousePos = this.getMousePos(event)
         element.animateTo(mousePos,20)
+    })
+
+    game.addOnMouseMoveListener(function (event) {
+        if (event.buttons === 0) {
+            return
+        }
+        const mousePos = this.getMousePos(event)
+        element.animateTo(mousePos,2)
+    })
+    game.addOnMouseUpListener(function (event) {
+        oval.fill = "random"
     })
 }
 testAnimateTo()
@@ -1225,8 +981,6 @@ function testFunctionCallsButtons() {
     createHTMLbutton("Audio",testSound)
     createHTMLbutton("WASD+Arrows",testKeyboardInput)
     createHTMLbutton("Area Detection",testMoveToArea)
-    createHTMLbutton("Frog Game",frogFlyGame)
-    createHTMLbutton("Scales Game",scalesGame)
     createHTMLbutton("Animate To",testAnimateTo)
 }
 testFunctionCallsButtons()

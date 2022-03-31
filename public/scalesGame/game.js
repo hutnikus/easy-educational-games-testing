@@ -7,11 +7,6 @@ const canvas = document.getElementById('game');
 canvas.width = 600;
 canvas.height = 600;
 
-const center = new G.Point(
-    canvas.width/2,
-    canvas.height/2
-)
-
 const game = new G.Game(canvas);
 
 function scalesGame() {
@@ -72,16 +67,23 @@ function scalesGame() {
 
     const winText = game.createElement({level:10}).createText("",{font:"100px arial",color:"green"})
 
+    const winAudio = new Audio("/resources/win2.mp3")
+    const loseAudio = new Audio("/resources/lose3.mp3")
+
     function winCondition() {
         if (leftBucketValue > rightBucketValue) {
             return
         }
         if (leftBucketValue === rightBucketValue) {
             // win
+            winAudio.currentTime = 0
+            winAudio.play()
             winText.text = "YOU WIN!"
             winText.color = "green"
         } else if (leftBucketValue < rightBucketValue) {
             // lose
+            loseAudio.currentTime = 0
+            loseAudio.play()
             winText.text = "YOU LOSE!"
             winText.color = "red"
         }

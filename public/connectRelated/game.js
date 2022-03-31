@@ -7,11 +7,6 @@ const canvas = document.getElementById('game');
 canvas.width = 600;
 canvas.height = 600;
 
-const center = new G.Point(
-    canvas.width/2,
-    canvas.height/2
-)
-
 const game = new G.Game(canvas);
 
 function connectRelated() {
@@ -27,9 +22,14 @@ function connectRelated() {
         ["peniaze","penazenka"],
     ]
 
+    const stringElement = game.createElement()
+    stringElement.createText("Connect images that relate to each other")
+
+    const imageSize = 100
+
     function stringToElement(string) {
         const element = game.createElement({visible:false,name:string})
-        const image = element.createImage(string+".png",{width:100,height:100})
+        const image = element.createImage(string+".png",{width:imageSize,height:imageSize})
 
         element.addOnDragListener(drawLine)
         element.addOnFinishDraggingListener(onFinishDragging)
@@ -104,25 +104,32 @@ function connectRelated() {
         return undefined
     }
 
-    async function onFinishDragging() {
+    function onFinishDragging() {
         connectingLine.setLine(new G.Point(0, 0), new G.Point(0, 0))
 
-        const finishElement = await game.getElementAtPos(this.shared.mousePos)
+        const finishElement = game.getElementAtPos(this.shared.mousePos)
 
         if (!finishElement) {
-            console.log("not nice")
             return
         }
 
         if (finishElement.name === getOpposite(this.name)) {
-            console.log("nice")
+            //correct
+            correctAudio.currentTime = 0
+            correctAudio.play()
+
             this.animateTo(finishElement.center)
             this.draggable = false
             finishElement.draggable = false
         } else {
-            console.log("not nice")
+            //incorrect
+            incorrectAudio.currentTime = 0
+            incorrectAudio.play()
         }
     }
+
+    const correctAudio = new Audio("/resources/win1.mp3")
+    const incorrectAudio = new Audio("/resources/lose1.mp3")
 
 }
 connectRelated()

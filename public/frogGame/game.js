@@ -7,11 +7,6 @@ const canvas = document.getElementById('game');
 canvas.width = 600;
 canvas.height = 600;
 
-const center = new G.Point(
-    canvas.width/2,
-    canvas.height/2
-)
-
 const game = new G.Game(canvas);
 
 function frogFlyGame() {
@@ -127,12 +122,28 @@ function frogFlyGame() {
     const shuffleButton = game.createButton({color:"skyblue",width:150,height:30,text:"scare the storks"})
     shuffleButton.rectangle.lineWidth = 1
     shuffleButton.setPosition(500,25)
-    const sound = new Audio("../resources/croak.mp3")
+    const sound = new Audio("resources/croak.mp3")
 
     shuffleButton.addOnButtonPressListener(()=>{
-        sound.time = 0
+        sound.currentTime = 0
         sound.play()
         updateStorks(false)
     })
+
+    let playing = true
+    const crickets = new Audio("resources/cricket.mp3")
+
+    game.addOnClearListener(()=>{
+        playing = false
+    })
+
+    function cricketLoop() {
+        crickets.currentTime = 0
+        crickets.play()
+        if (playing) {
+            setTimeout(cricketLoop, Math.floor(Math.random() * 10000) + 5000)
+        }
+    }
+    cricketLoop()
 }
 frogFlyGame()
