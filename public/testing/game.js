@@ -31,19 +31,6 @@ function createHTMLbutton(text,callback) {
     return button
 }
 
-// test code to check if area is inside an element
-function isInside() {
-    canvas.addEventListener('mousemove',(event) => game.drawInside(event))
-
-    document.addEventListener("keyup",(e)=>{
-        if (e.code === "Space") {
-            e.preventDefault()
-            game.popElementByName("drawInside")
-        }
-    })
-}
-// isInside()
-
 // satellites that orbit each other and draw their path on canvas
 function spirograph() {
     game.clear()
@@ -102,7 +89,7 @@ function spirograph() {
                     newR * Math.cos(0) + pos.x,
                     newR * Math.sin(0) + pos.y
                 ),
-                [new G.GameShape('oval',{rX:circleRadius,rY:circleRadius,fill:'random',level:1})],
+                [new G.GameShape('oval',{rx:circleRadius,ry:circleRadius,fill:'random',level:1})],
                 {clickable:false,name:`${circles.length}`}
             )
 
@@ -119,7 +106,7 @@ function spirograph() {
 
             lastCircle = new G.GameElement(
                 pos.copy(),
-                [new G.GameShape('oval',{rX:circleRadius,rY:circleRadius,fill:'random',level:1})],
+                [new G.GameShape('oval',{rx:circleRadius,ry:circleRadius,fill:'random',level:1})],
                 {clickable:false,name:`${circles.length}`}
             )
 
@@ -189,8 +176,8 @@ function dragDrop() {
         [
             new G.GameText('1', {level: 2}),
             new G.GameShape('oval', {
-                rX: 100,
-                rY: 100,
+                rx: 100,
+                ry: 100,
                 fill: 'red',
                 level: 1,
                 rotation: 0.2,
@@ -229,25 +216,25 @@ function pogs() {
     element1.addHitbox(100)
     element1.setPosition(250,250)
     element1.createText('1', {level: 2})
-    element1.createShape('oval', {rX: 100,rY: 100, fill: 'red', level: 1, stroke: 'black', lineWidth: 20})
+    element1.createShape('oval', {rx: 100,ry: 100, fill: 'red', level: 1, stroke: 'black', lineWidth: 20})
 
     const element2 = game.createElement({clickable: true, draggable:true, name: '2-blue', level: 10,hitboxVisible:true})
     element2.addHitbox(100)
     element2.setPosition(350,250)
     element2.createText('2', {level: 2})
-    element2.createShape('oval', {rX: 100,rY: 100, fill: 'blue', level: 1, stroke: 'black', lineWidth: 20})
+    element2.createShape('oval', {rx: 100,ry: 100, fill: 'blue', level: 1, stroke: 'black', lineWidth: 20})
 
     const element3 = game.createElement({clickable: true, draggable:true, name: '3-green', level: 10,hitboxVisible:true})
     element3.addHitbox(100)
     element3.setPosition(250,350)
     element3.createText('3', {level: 2})
-    element3.createShape('oval', {rX: 100,rY: 100, fill: 'green', level: 1, stroke: 'black', lineWidth: 20})
+    element3.createShape('oval', {rx: 100,ry: 100, fill: 'green', level: 1, stroke: 'black', lineWidth: 20})
 
     const element4 = game.createElement({clickable: true, draggable:true, name: '4-yellow', level: 10,hitboxVisible:true})
     element4.addHitbox(100)
     element4.setPosition(350, 350)
     element4.createText('3', {level: 2})
-    element4.createShape('oval', {rX: 100,rY: 100, fill: 'yellow', level: 1, stroke: 'black', lineWidth: 20})
+    element4.createShape('oval', {rx: 100,ry: 100, fill: 'yellow', level: 1, stroke: 'black', lineWidth: 20})
 
     const elements = [element1,element2,element3,element4]
 
@@ -336,7 +323,7 @@ function testDrawables() {
     // const gif = element.createGif("jump",{width:200,height:200,stagger:1})
     // const img = element.createImage('frog.png',{width:100,height:100})
     // const rect = element.createShape("rectangle",{width:500,rotation:0.3})
-    // const oval = element.createShape("oval",{rX:100})
+    // const oval = element.createShape("oval",{rx:100})
     // const poly = element.createShape("polygon",{coords:[-100,-5,10,-10,30,30]})
     // const line = element.createShape("line",{coords:[-100,-5,10,-10,30,30]})
     // const text = element.createText("Hewwo uwu")
@@ -346,8 +333,8 @@ function testDrawables() {
     // element.addChild(new G.GameShape('rectangle',{width:100,height:50,dx:-100,fill:'red',stroke:'black',level:0,rotation:0}))
     // element.addChild(new G.GameShape('rectangle',{width:100,height:200,stroke:'black',fill:'red',lineWidth:2,level:1,rotation:0.3}))
     // element.addChild(new G.GameText('level1',{level:1}))
-    // element.addChild(new G.GameShape('oval',{rX:100,rY:50,fill:'red',level:1,stroke:'black',lineWidth:20,rotation:Math.PI/2}))
-    // element.addChild(new G.GameShape('oval',{rX:50,rY:20,dx:200, dy:200,fill:'blue',level:1,rotation:0.4}))
+    // element.addChild(new G.GameShape('oval',{rx:100,ry:50,fill:'red',level:1,stroke:'black',lineWidth:20,rotation:Math.PI/2}))
+    // element.addChild(new G.GameShape('oval',{rx:50,ry:20,dx:200, dy:200,fill:'blue',level:1,rotation:0.4}))
     // element.addChild(new G.GameShape('polygon',{name:'poly center',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3}))
     // element.addChild(new G.GameShape('polygon',{name:'poly center mirrored',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3,hScale:-1}))
     // element.addChild(new G.GameShape('polygon',{name:'poly right',level:6,dx:200, coords:[-100,-5,10,-10,30,30],fill:'red',rotation:1}))
@@ -400,13 +387,13 @@ function testKeyboardInput() {
 
     const player1 = game.createElement({pressable:true,draggable:true,hitboxVisible:true})
     player1.setPosition(200,300)
-    player1.createShape('oval',{rX:50,rY:50,fill:'blue',name:"kruh"})
+    player1.createShape('oval',{rx:50,ry:50,fill:'blue',name:"kruh"})
     player1.createText("1",{level: 1})
     player1.addHitbox(50)
 
     const player2 = game.createElement({pressable:true,draggable:true,hitboxVisible:true})
     player2.setPosition(400,300)
-    player2.createShape('oval',{rX:50,rY:50,fill:'red',name:"kruh"})
+    player2.createShape('oval',{rx:50,ry:50,fill:'red',name:"kruh"})
     player2.createText("2",{level: 1})
     player2.addHitbox(50)
 
@@ -672,7 +659,7 @@ function testComposite() {
 
     const centerPoint = game.createElement()
     centerPoint.setPosition(300,300)
-    centerPoint.addChild(new G.GameShape("oval",{rX:10,rY:10,fill:"brown"}))
+    centerPoint.addChild(new G.GameShape("oval",{rx:10,ry:10,fill:"brown"}))
 
     const composite = game.createComposite({draggable:true,clickable:true})
 
@@ -765,7 +752,7 @@ function testMoveToArea() {
     const el = game.createElement({name: "movingElement"})
     el.setPosition(300,300)
     el.draggable = true
-    el.addChild(new G.GameShape("oval",{rX:50,rY:50,fill:"red"}))
+    el.addChild(new G.GameShape("oval",{rx:50,ry:50,fill:"red"}))
     el.addChild(new G.GameText("DRAG ME!",{name:"text",maxWidth:90}))
 
 
@@ -828,34 +815,50 @@ function testListeners() {
 // testListeners()
 
 function testGrid() {
+    game.clear()
+
     const grid = game.createGrid()
     grid.setPosition(100,100)
     grid.width = 400
     grid.height = 400
 
-    const element = game.createElement({draggable:true,pressable:true})
-    const oval = element.createShape("oval",{rX:20})
-    element.setPosition(100,100)
-
-    grid.addElement(0,0,element)
-
-    element.addOnFinishDraggingListener(function () {
+    function finishDragging() {
         if (grid.isInside(this.center)) {
             const colRow = grid.getPosFromPixels(this.center.x,this.center.y)
 
-            if (!element.grid) {
-                grid.addElement(colRow.x,colRow.y,element)
-            } else {
-                grid.moveElement(colRow.x, colRow.y, element)
+            try {
+                if (!this.grid) {
+                    grid.addElement(colRow.x, colRow.y, this)
+                } else {
+                    grid.moveElement(colRow.x, colRow.y, this)
+                }
+            } catch (e) {
+                if (e instanceof grid.FullError) {
+                    grid.snapElement(this)
+                    return
+                }
             }
 
             console.log(colRow.asString())
         } else {
-            if (element.grid) {
+            if (this.grid) {
                 grid.removeElement(this)
             }
         }
-    })
+    }
+
+    function addElement(first=false) {
+        const freePos = grid.randomFreePosition()
+        const newElement = game.createElement({draggable:true,pressable:true})
+        newElement.createShape("oval", {rx: 20,fill:(first)?"blue":"red"})
+        grid.addElement(...freePos.asArray(), newElement)
+        newElement.addOnFinishDraggingListener(finishDragging)
+        return newElement
+    }
+
+    const element = addElement(true)
+
+
 
     const stagger = 10
     let stg = 0
@@ -875,7 +878,13 @@ function testGrid() {
                 stg = stagger
             }
         }
-        this.move(new G.Point(dx,dy))
+        try {
+            this.move(new G.Point(dx, dy))
+        } catch (e) {
+            if (e instanceof grid.FullError) {
+                return;
+            }
+        }
     }
 
     element.addOnKeyHoldListener("w",function () {
@@ -896,19 +905,13 @@ function testGrid() {
 
     button.addOnButtonPressListener(()=>{
         const start = Date.now()
-        function f() {
-            const freePos = grid.randomFreePosition()
-            const newElement = game.createElement()
-            newElement.createShape("oval", {rX: 20})
-            grid.addElement(...freePos.asArray(), newElement)
-        }
-        f()
+        addElement()
         const duration = Date.now() - start
         console.log(`It took ${duration} ms`)
     })
 
 }
-// testGrid()
+testGrid()
 
 function testElementHold() {
     const el = game.createElement({holdable:true})
@@ -967,7 +970,7 @@ function testAnimateTo() {
         oval.fill = "random"
     })
 }
-testAnimateTo()
+// testAnimateTo()
 
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
@@ -982,5 +985,6 @@ function testFunctionCallsButtons() {
     createHTMLbutton("WASD+Arrows",testKeyboardInput)
     createHTMLbutton("Area Detection",testMoveToArea)
     createHTMLbutton("Animate To",testAnimateTo)
+    createHTMLbutton("Grid",testGrid)
 }
 testFunctionCallsButtons()
