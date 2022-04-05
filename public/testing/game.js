@@ -233,7 +233,7 @@ function pogs() {
     const element4 = game.createElement({clickable: true, draggable:true, name: '4-yellow', level: 10,hitboxVisible:true})
     element4.addHitbox(100)
     element4.setPosition(350, 350)
-    element4.createText('3', {level: 2})
+    element4.createText('4', {level: 2})
     element4.createShape('oval', {rx: 100,ry: 100, fill: 'yellow', level: 1, stroke: 'black', lineWidth: 20})
 
     const elements = [element1,element2,element3,element4]
