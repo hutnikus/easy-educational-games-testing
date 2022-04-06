@@ -70,6 +70,7 @@ function resetGame() {
     nextButton.text = NEXT_TEXT
     nextButton.removeOnButtonPressListener(onClickResetButton)
     nextButton.addOnButtonPressListener(onClickNextButton)
+    nextButton.color = "green"
 }
 
 function setElementVisibility(setting) {
@@ -98,7 +99,6 @@ function displayVisibleElements() {
         }
     } else {
         const topNumber = Math.ceil(length/2)
-        console.log(topNumber)
         const topSpacing = canvas.width/topNumber
         for (let i = 0; i < topNumber; i++) {
             visibleElements[i].setPosition(
@@ -154,6 +154,7 @@ function onClickNextButton() {
         this.removeOnButtonPressListener(onClickNextButton)
         this.addOnButtonPressListener(onClickResetButton)
         this.text = RESET_TEXT
+        this.color = "yellow"
     }
 }
 
