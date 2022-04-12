@@ -276,7 +276,6 @@ function moveClickedToTop() {
 
         if (clickedElement !== null) {
             const highestLevel = Math.max(...game.elements.map(el => el.level))
-
             game.changeLevelOfElement(clickedElement,highestLevel+1)
         }
     }
@@ -654,7 +653,7 @@ function testComposite() {
     const el3 = game.createElement()
     el3.setPosition(300,500)
     el3.setName(game,"jump")
-    el3.addChild(new G.GameGif('jump',{name:"gif",width:100,height:100,stagger:2}))
+    el3.addChild(new G.GameGif('jump',{name:"gif",width:100,height:100,stagger:0}))
     el3.draggable = true
 
     const centerPoint = game.createElement()
@@ -956,7 +955,7 @@ function testAnimateTo() {
 
     game.addOnMouseDownListener(function (event) {
         const mousePos = this.getMousePos(event)
-        element.animateTo(mousePos,20)
+        element.animateTo(mousePos,50)
     })
 
     game.addOnMouseMoveListener(function (event) {

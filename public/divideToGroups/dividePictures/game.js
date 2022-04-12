@@ -1,5 +1,5 @@
 // working code
-import * as G from "../modules/index.js"
+import * as G from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
