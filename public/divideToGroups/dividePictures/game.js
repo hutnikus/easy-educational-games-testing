@@ -1,5 +1,5 @@
 // working code
-import * as G from "/modules/index.js"
+import {Game, randomSelection} from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
@@ -7,7 +7,7 @@ const canvas = document.getElementById('game');
 canvas.width = 960;
 canvas.height = 540;
 
-const game = new G.Game(canvas);
+const game = new Game(canvas);
 
 ///////////////////////////////////////////////
 
@@ -27,17 +27,7 @@ function createElements() {
 
 function randomElements(number) {
     number = Math.min(number,elements.length)
-
-    function shuffleArray(a) {
-        for (let i = a.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [a[i], a[j]] = [a[j], a[i]];
-        }
-        return a;
-    }
-
-    const array = shuffleArray([...elements])
-    return array.slice(0,number)
+    return randomSelection(elements,number)
 }
 
 function placeVisibleElements() {
@@ -135,6 +125,15 @@ function resetGame() {
     placeVisibleElements()
 }
 
+function createResetButton() {
+    const resetButton = game.createButton({
+        text:"reset",
+        action:resetGame,
+    })
+    resetButton.setPosition(canvas.width-55,30)
+    return resetButton
+}
+
 ///////////////////////////////////////////
 
 const vegetables = [
@@ -171,13 +170,7 @@ const incorrectAudio = new Audio("/resources/lose2.mp3")
 createBackground()
 const areas = createAreas()
 const winText = createWinText()
-
+const resetButton = createResetButton()
 const elements = createElements()
 let visibleElements
 resetGame()
-
-const resetButton = game.createButton({
-    text:"reset",
-    action:resetGame,
-})
-resetButton.setPosition(canvas.width-55,30)

@@ -1,5 +1,5 @@
 // working code
-import * as G from "/modules/index.js"
+import {Game, randomLightColor, randomSelection} from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
@@ -7,41 +7,15 @@ const canvas = document.getElementById('game');
 canvas.width = 960;
 canvas.height = 540;
 
-const game = new G.Game(canvas);
+const game = new Game(canvas);
 
-const allCategories = ['mestá','rieky','nádrže','pohoria','vrchy','hrady','nížiny'];
-
-const entities = new Map([
-    ['mestá', ['Bratislava', 'Košice', 'Žilina', 'Trenčín', 'Prešov', 'Poprad', 'Trnava', 'Banská Bystrica', 'Piešťany', 'Liptovský Mikuláš']],
-    ['rieky', ['Dunaj', 'Váh', 'Hron', 'Hornád', 'Ipeľ', 'Morava', 'Dunajec', 'Torysa']],
-    ['nádrže', ['Oravská priehrada', 'Domaša', 'Liptovská Mara', 'Zemplínska Šírava', 'Vodné dielo Gabčíkovo']],
-    ['pohoria', ['Vysoké Tatry', 'Nízky Tatry', 'Malá Fatra', 'Veľká Fatra', 'Malé Karpaty', 'Strážovské vrchy', 'Tribeč', 'Vtáčnik', 'Biele Karpaty', 'Štiavnické vrchy', 'Kremnické vrchy', 'Slovenské rudohorie', 'Slanské vrchy', 'Nízke Beskydy']],
-    ['vrchy', ['Chopok', 'Ďumbier', 'Kriváň', 'Gerlachovský štít', 'Lomnický štít', 'Sitno']],
-    ['hrady', ['Beckov', 'Devín', 'Trenčiansky hrad', 'Bratislavský hrad', 'Bojnický zámok', 'Nitriansky hrad', 'Levický hrad', 'Považský hrad', 'Oravský hrad', 'Bzovík', 'Červený kameň', 'Zvolenský zámok', 'Spišský hrad']],
-    ['nížiny',['Záhorská nížina', 'Podunajská nížina', 'Východoslovenská nížina']]
-])
-
-
-function randomLightColor() {
-    const red = Math.floor(Math.random() * 50) + 200
-    const green = Math.floor(Math.random() * 50) + 200
-    const blue = Math.floor(Math.random() * 50) + 200
-
-    return "#" + red.toString(16) + green.toString(16) + blue.toString(16)
-}
+///////////////////////////////////////////////////////
 
 function createCard(text,category) {
     const element = game.createElement({draggable:true,name:text})
     const textDrawable = element.createText(text)
     const textWidth = textDrawable.measureText(element.shared.tempContext).width
     const width = Math.floor(textWidth) + 15
-    // CHANGED POLYGON TO RECTANGLE
-    // element.createShape("polygon", {coords:[
-    //         -(width/2),-15,
-    //         (width/2),-15,
-    //         (width/2),15,
-    //         -(width/2),15,
-    // ], level:-1, name:"card", stroke:"black"})
     element.createShape("rectangle",{width:width,height:30,level:-1,name:"card",stroke:"black",fill:randomLightColor()})
     element.category = category
 
@@ -60,15 +34,12 @@ function createCardsFromCategory(category) {
             (Math.random() * w) + 100,
             (Math.random() * h) + 20
         )
-        // MOVED TO ELEMENT INITIALIZATION
-        // card.getChildByName("card").fill = randomLightColor()
         result.push(card)
     }
     return result
 }
 
-function createCards(categories){
-    // VAR -> LET
+function createCards(categories) {
     let result = []
     for (const category of categories) {
         result = result.concat(createCardsFromCategory(category))
@@ -78,18 +49,8 @@ function createCards(categories){
 
 function createRegion(text, width, height) {
     const element = game.createElement({draggable:false,name:text})
-    // CHANGED POLYGON TO RECTANGLE
-    // element.createShape("polygon", {coords:[
-    //         -(width/2),-(height/2),
-    //         (width/2),-(height/2),
-    //         (width/2),(height/2),
-    //         -(width/2),(height/2),
-    //     ], level:-1, name:"region", stroke:"black"})
     element.createShape("rectangle", {width:width, height:height, level:-1, name:"region", stroke:"black",fill:randomLightColor()})
-    // REMOVED VARIABLE ASSIGNMENT
     element.createText(text,{dy:-(height/2) + 20,font:"30px Arial"})
-    // UNNECESSARY CODE
-    // const textWidth = textDrawable.measureText(element.shared.tempContext).width
 
     return element
 }
@@ -99,32 +60,15 @@ function createRegions(categories) {
     const y = Math.floor(canvas.height/4+height/2)
     const result = new Map()
     const width = Math.floor(canvas.width / categories.length)
-    // VAR -> LET
     let x = width/2
     for (const category of categories) {
         const region = createRegion(category, width, height)
         region.setPosition(x,y)
-        // MOVED TO ELEMENT INITIALIZATION
-        // region.getChildByName("region").fill = randomLightColor()
         x = x + width
         result.set(category, region)
     }
     return result
 }
-
-function shuffleArray(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-}
-
-function randomSelection(arr,length) {
-    const array = shuffleArray([...arr])
-    return array.slice(0,length)
-}
-
 
 function insideCorrectRegion(element) {
     const region = regions.get(element.category)
@@ -152,12 +96,6 @@ function submitSolution() {
     resetGame()
 }
 
-// VAR -> LET
-let regions = new Map()
-let cards = []
-
-const correctAudio = new Audio("/resources/win1.mp3")
-
 function resetGame() {
     game.clear()
 
@@ -171,5 +109,23 @@ function resetGame() {
     regions = createRegions(categories)
     cards = createCards(categories)
 }
+
+///////////////////////////////////////////////////////
+
+const allCategories = ['mestá','rieky','nádrže','pohoria','vrchy','hrady','nížiny'];
+
+const entities = new Map([
+    ['mestá', ['Bratislava', 'Košice', 'Žilina', 'Trenčín', 'Prešov', 'Poprad', 'Trnava', 'Banská Bystrica', 'Piešťany', 'Liptovský Mikuláš']],
+    ['rieky', ['Dunaj', 'Váh', 'Hron', 'Hornád', 'Ipeľ', 'Morava', 'Dunajec', 'Torysa']],
+    ['nádrže', ['Oravská priehrada', 'Domaša', 'Liptovská Mara', 'Zemplínska Šírava', 'Vodné dielo Gabčíkovo']],
+    ['pohoria', ['Vysoké Tatry', 'Nízky Tatry', 'Malá Fatra', 'Veľká Fatra', 'Malé Karpaty', 'Strážovské vrchy', 'Tribeč', 'Vtáčnik', 'Biele Karpaty', 'Štiavnické vrchy', 'Kremnické vrchy', 'Slovenské rudohorie', 'Slanské vrchy', 'Nízke Beskydy']],
+    ['vrchy', ['Chopok', 'Ďumbier', 'Kriváň', 'Gerlachovský štít', 'Lomnický štít', 'Sitno']],
+    ['hrady', ['Beckov', 'Devín', 'Trenčiansky hrad', 'Bratislavský hrad', 'Bojnický zámok', 'Nitriansky hrad', 'Levický hrad', 'Považský hrad', 'Oravský hrad', 'Bzovík', 'Červený kameň', 'Zvolenský zámok', 'Spišský hrad']],
+    ['nížiny',['Záhorská nížina', 'Podunajská nížina', 'Východoslovenská nížina']]
+])
+
+let regions = new Map()
+let cards = []
+const correctAudio = new Audio("/resources/win1.mp3")
 
 resetGame()

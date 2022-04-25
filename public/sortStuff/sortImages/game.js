@@ -1,5 +1,5 @@
 // working code
-import * as G from "../modules/index.js"
+import {Game, shuffleArray} from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
@@ -7,39 +7,9 @@ const canvas = document.getElementById('game');
 canvas.width = 960;
 canvas.height = 540;
 
-const game = new G.Game(canvas);
+const game = new Game(canvas);
 
 ////////////////////////////////////////////////////
-
-const PANEL_HEIGHT = 40
-const SPACING = 5
-const SB_WIDTH = 70
-const NGB_WIDTH = 80
-const SLIDER_WIDTH = 150
-const MIN_SLIDER = 4
-const MAX_SLIDER = 10
-
-// requirements for callback:
-// parameters (quantity,images)
-// each element of returned array has to have a child with name "img" with set width or height (horizontal/vertical sorting)
-const settings = [
-    {
-        ordering:["hAsc","hDesc"],
-        minNum:MIN_SLIDER,
-        maxNum:9,
-        callback:createBuildingElements,
-        images:["skyscraper"],
-    },
-    {
-        ordering:["vAsc","vDesc"],
-        minNum:MIN_SLIDER,
-        maxNum:MAX_SLIDER,
-        callback:createHlineElements,
-        images:undefined,
-    }
-]
-const correctMsg = ["Awesome!","Amazing!","You're really good at sorting!","Nice job!"]
-const incorrectMsg = ["It's not correct, try again!","Something's placed wrong, try to find it!","Incorrect!"]
 
 function createPanel() {
     const panel = game.createElement()
@@ -189,7 +159,7 @@ function createBuildingElements(qty,images) {
         })
         array.push(element)
     }
-    const shuffled = [...array].sort((a, b) => Math.random()-0.5)
+    const shuffled = shuffleArray(array)
     for (const i in shuffled) {
         const img = shuffled[i].getChildByName("img")
         shuffled[i].setPosition(
@@ -324,6 +294,36 @@ function solve() {
 }
 
 ////////////////////////////////////////////////////
+
+const PANEL_HEIGHT = 40
+const SPACING = 5
+const SB_WIDTH = 70
+const NGB_WIDTH = 80
+const SLIDER_WIDTH = 150
+const MIN_SLIDER = 4
+const MAX_SLIDER = 10
+
+// requirements for callbacks:
+// parameters (quantity,images)
+// each element of returned array has to have a child with name "img" with set width or height (horizontal/vertical sorting)
+const settings = [
+    {
+        ordering:["hAsc","hDesc"],
+        minNum:MIN_SLIDER,
+        maxNum:9,
+        callback:createBuildingElements,
+        images:["skyscraper"],
+    },
+    {
+        ordering:["vAsc","vDesc"],
+        minNum:MIN_SLIDER,
+        maxNum:MAX_SLIDER,
+        callback:createHlineElements,
+        images:undefined,
+    }
+]
+const correctMsg = ["Awesome!","Amazing!","You're really good at sorting!","Nice job!"]
+const incorrectMsg = ["It's not correct, try again!","Something's placed wrong, try to find it!","Incorrect!"]
 
 const panel = createPanel()
 const headerText = createHeaderText()

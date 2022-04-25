@@ -1,5 +1,5 @@
 // working code
-import * as G from "/modules/index.js"
+import {Game, shuffleArray} from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
@@ -7,46 +7,33 @@ const canvas = document.getElementById('game');
 canvas.width = 960;
 canvas.height = 540;
 
-const game = new G.Game(canvas);
+const game = new Game(canvas);
 
-const backgroundElement = game.createElement()
-backgroundElement.createShape("rectangle", {width:canvas.width,height:canvas.height,fill:"green"})
+////////////////////////////////////////////////////////////
 
-const selectionAreaElement = game.createElement()
-selectionAreaElement.createShape("rectangle",{width:500,height:250,stroke:"black",fill:"#ded"})
-selectionAreaElement.createShape("rectangle",{dy:-110,width:500,height:30,fill:"#1c1"})
-const conditionText = selectionAreaElement.createText("Which insect has a stinger?",{dy:-110,font:"20px Comic Sans MS"})
+function createBackgroundElement() {
+    const backgroundElement = game.createElement()
+    backgroundElement.createShape("rectangle", {width:canvas.width,height:canvas.height,fill:"green"})
+    return backgroundElement
+}
 
-const submitButton = game.createButton({text:"submit",width:50,height:30,action:submitSolution,level:Number.POSITIVE_INFINITY})
-submitButton.setPosition(canvas.width/2 + 225,canvas.height/2 - 110)
-submitButton.textDrawable.font = "15px Comic Sans MS"
+function createSelectionAreaElement() {
+    const selectionAreaElement = game.createElement()
+    selectionAreaElement.createShape("rectangle",{width:500,height:250,stroke:"black",fill:"#ded"})
+    selectionAreaElement.createShape("rectangle",{dy:-110,width:500,height:30,fill:"#1c1"})
+    return selectionAreaElement
+}
 
-const insects = [
-    "mucha", "motyl", "vcela", "cvrcek", "lucny_konik", "mravec", "komar", "vazka", "osa", "lienka"
-]
+function createConditionText() {
+    return selectionAreaElement.createText("Which insect has a stinger?",{dy:-110,font:"20px Comic Sans MS"})
+}
 
-const conditions = [
-    {
-        question: "Which insect has a stinger?",
-        elements: ["vcela","osa"]
-    },
-    {
-        question: "Which insect makes a noise?",
-        elements: ["osa","vcela","mucha","cvrcek","lucny_konik","komar"]
-    },
-    {
-        question: "Which insect lives in a community?",
-        elements: ["vcela", "mravec", "osa"]
-    },
-    {
-        question: "Which insect lives close to water?",
-        elements: ["komar", "vazka"]
-    },
-    {
-        question: "Which insect is annoying or dangerous?",
-        elements: ["mucha", "komar", "osa"]
-    }
-]
+function createSubmitButton() {
+    const submitButton = game.createButton({text:"submit",width:50,height:30,action:submitSolution,level:Number.POSITIVE_INFINITY})
+    submitButton.setPosition(canvas.width/2 + 225,canvas.height/2 - 110)
+    submitButton.textDrawable.font = "15px Comic Sans MS"
+    return submitButton
+}
 
 function submitSolution() {
     const selected = getSelectedElementNames()
@@ -80,8 +67,6 @@ function submitSolution() {
     loadRandomNewCondition()
 }
 
-let currentCondition = undefined
-
 function loadCondition(number) {
     for (const i in elementArray) {
         setElementPosition(i,elementArray,positionArray)
@@ -89,14 +74,6 @@ function loadCondition(number) {
 
     currentCondition = conditions[number]
     conditionText.text = currentCondition.question
-}
-
-function shuffleArray(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
 }
 
 function createElementArray (nameArray) {
@@ -173,6 +150,40 @@ function loadRandomNewCondition() {
     loadCondition(conditionNumber)
 }
 
+/////////////////////////////////////////////////////////////
+
+const insects = [
+    "mucha", "motyl", "vcela", "cvrcek", "lucny_konik", "mravec", "komar", "vazka", "osa", "lienka"
+]
+
+const conditions = [
+    {
+        question: "Which insect has a stinger?",
+        elements: ["vcela","osa"]
+    },
+    {
+        question: "Which insect makes a noise?",
+        elements: ["osa","vcela","mucha","cvrcek","lucny_konik","komar"]
+    },
+    {
+        question: "Which insect lives in a community?",
+        elements: ["vcela", "mravec", "osa"]
+    },
+    {
+        question: "Which insect lives close to water?",
+        elements: ["komar", "vazka"]
+    },
+    {
+        question: "Which insect is annoying or dangerous?",
+        elements: ["mucha", "komar", "osa"]
+    }
+]
+
+let currentCondition = undefined
+const backgroundElement = createBackgroundElement()
+const selectionAreaElement = createSelectionAreaElement()
+const conditionText = createConditionText()
+const submitButton = createSubmitButton()
 const elementArray = createElementArray(insects)
 const positionArray = createPostitionArray()
 let unplayedConditions = [...conditions.keys()]
@@ -180,4 +191,3 @@ const correctAudio = new Audio("/resources/win2.mp3")
 const incorrectAudio = new Audio("/resources/lose2.mp3")
 
 loadRandomNewCondition()
-

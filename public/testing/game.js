@@ -239,10 +239,11 @@ function pogs() {
     const elements = [element1,element2,element3,element4]
 
     for (const objt of elements) {
-        const moveToTop = () => {
-            game.changeLevelOfElement(objt,game.highestLevel()+1)
-        }
-        objt.addOnClickListener(moveToTop)
+        // THIS IS REPLACED BY game.moveToTopWhenDragging(elements)
+        // const moveToTop = () => {
+        //     game.changeLevelOfElement(objt,game.highestLevel()+1)
+        // }
+        // objt.addOnClickListener(moveToTop)
 
         const checkCollisions = () => {
             const collisions = game.checkCollisions(objt).map((obj)=>obj.name)
@@ -250,6 +251,8 @@ function pogs() {
         }
         objt.addOnFinishDraggingListener(checkCollisions)
     }
+
+    game.moveToTopWhenDragging(elements)
 }
 // pogs()
 

@@ -1,5 +1,5 @@
 // working code
-import * as G from "/modules/index.js"
+import {Game, randomLightColor, randomSelection} from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
@@ -7,28 +7,7 @@ const canvas = document.getElementById('game');
 canvas.width = 960;
 canvas.height = 540;
 
-const game = new G.Game(canvas);
-
-const pranostiky = [
-    ["Od Jakuba do Hany", "nik nevidel letieť vrany."],
-    ["Chladný máj -", "pre ovocie raj."],
-    ["Ak je máj záhradníkom,", "býva i roľníkom."],
-    ["Nerád tomu sedliak býva,", "keď mu v apríli nepršieva."],
-    ["Keď v máji neprší,", "jún sucho dovŕši."],
-    ["Marec bez vody,", "apríl bez trávy."],
-    ["Kto nenasial hrachu v marci,", "nebude ho variť v hrnci."],
-    ["Plačivá Dorota,", "omrzlá robota."],
-    ["Dážď, ktorý v auguste do obeda prší,", "skorej ako obed minie sa usuší."],
-    ["Ak na Ondreja lietajú včely,", "bude neúrodný rok."],
-]
-
-function randomLightColor() {
-    const red = Math.floor(Math.random() * 50) + 200
-    const green = Math.floor(Math.random() * 50) + 200
-    const blue = Math.floor(Math.random() * 50) + 200
-
-    return "#" + red.toString(16) + green.toString(16) + blue.toString(16)
-}
+const game = new Game(canvas);
 
 function createLeftShape(text) {
     const element = game.createElement({draggable:true,name:text})
@@ -89,19 +68,6 @@ function createShapesFromArray(array) {
         )
         right.getChildByName("right shape").fill = randomLightColor()
     }
-}
-
-function shuffleArray(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-}
-
-function randomSelection(arr,length) {
-    const array = shuffleArray([...arr])
-    return array.slice(0,length)
 }
 
 function getOpposite(name) {
@@ -176,10 +142,6 @@ function onFinishDragging() {
     }
 }
 
-let remainingSentences = []
-
-const correctAudio = new Audio("/resources/win1.mp3")
-
 function resetGame() {
     game.clear()
 
@@ -188,5 +150,21 @@ function resetGame() {
     //vykresli
     createShapesFromArray(remainingSentences)
 }
+
+const pranostiky = [
+    ["Od Jakuba do Hany", "nik nevidel letieť vrany."],
+    ["Chladný máj -", "pre ovocie raj."],
+    ["Ak je máj záhradníkom,", "býva i roľníkom."],
+    ["Nerád tomu sedliak býva,", "keď mu v apríli nepršieva."],
+    ["Keď v máji neprší,", "jún sucho dovŕši."],
+    ["Marec bez vody,", "apríl bez trávy."],
+    ["Kto nenasial hrachu v marci,", "nebude ho variť v hrnci."],
+    ["Plačivá Dorota,", "omrzlá robota."],
+    ["Dážď, ktorý v auguste do obeda prší,", "skorej ako obed minie sa usuší."],
+    ["Ak na Ondreja lietajú včely,", "bude neúrodný rok."],
+]
+
+let remainingSentences = []
+const correctAudio = new Audio("/resources/win1.mp3")
 
 resetGame()

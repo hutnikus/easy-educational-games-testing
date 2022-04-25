@@ -1,5 +1,5 @@
 // working code
-import * as G from "/modules/index.js"
+import {Game} from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
@@ -7,7 +7,7 @@ const canvas = document.getElementById('game');
 canvas.width = 960;
 canvas.height = 540;
 
-const game = new G.Game(canvas);
+const game = new Game(canvas);
 
 ///////////////////////////////////////////////
 
