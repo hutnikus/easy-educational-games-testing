@@ -913,7 +913,7 @@ function testGrid() {
     })
 
 }
-testGrid()
+// testGrid()
 
 function testElementHold() {
     const el = game.createElement({holdable:true})
@@ -928,11 +928,11 @@ function testElementHold() {
 function testRangeSlider() {
     game.clear()
 
-    const slider1 = game.createRangeSlider({color:"blue"})
+    const slider1 = game.createRangeSlider({color:"blue",min:0,max:1,floating:true})
     slider1.setPosition(300,100)
-    const slider2 = game.createRangeSlider()
+    const slider2 = game.createRangeSlider({min:0,max:1,floating:true})
     slider2.setValue(0)
-    const slider3 = game.createRangeSlider()
+    const slider3 = game.createRangeSlider({min:0,max:1,floating:true})
     slider3.setPosition(300,500)
 
     slider1.addOnChangeListener(function () {
@@ -974,6 +974,38 @@ function testAnimateTo() {
 }
 // testAnimateTo()
 
+function testIntegerSlider() {
+    game.clear()
+
+    const floatingSlider = game.createRangeSlider({width:200,min:-1,max:1,floating:true})
+    floatingSlider.setPosition(400,100)
+    const floatingValueElement = game.createElement()
+    floatingSlider.textElement = floatingValueElement.createText(`${floatingSlider.getValue()}`,{font:"40px arial"})
+    floatingValueElement.setPosition(400,200)
+
+    const floatingText = game.createElement()
+    floatingText.createText("Decimal numbers")
+    floatingText.setPosition(100,150)
+
+    const integerSlider = game.createRangeSlider({width:200,min:-5,max:5,color:"blue"})
+    integerSlider.setPosition(400,400)
+    const integerValueElement = game.createElement()
+    integerSlider.textElement = integerValueElement.createText(`${integerSlider.getValue()}`,{font:"40px arial"})
+    integerValueElement.setPosition(400,500)
+
+    const integerText = game.createElement()
+    integerText.createText("Integers")
+    integerText.setPosition(100,450)
+
+    function displayValue() {
+        this.textElement.text = this.getValue()
+    }
+
+    floatingSlider.addOnChangeListener(displayValue)
+    integerSlider.addOnChangeListener(displayValue)
+}
+testIntegerSlider()
+
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
     createHTMLbutton("Pogs",pogs)
@@ -988,5 +1020,6 @@ function testFunctionCallsButtons() {
     createHTMLbutton("Area Detection",testMoveToArea)
     createHTMLbutton("Animate To",testAnimateTo)
     createHTMLbutton("Grid",testGrid)
+    createHTMLbutton("Integer Slider",testIntegerSlider)
 }
 testFunctionCallsButtons()

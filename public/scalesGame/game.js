@@ -162,7 +162,7 @@ function createNewGameButton() {
 }
 
 function createAngleTestingSlider() {
-    const slider = game.createRangeSlider({width:300,visible:true})
+    const slider = game.createRangeSlider({width:300,visible:true,min:0,max:1,floating:true})
     slider.setPosition(300,500)
     slider.addOnChangeListener(function () {
         setScaleAngle(this.getValue())
