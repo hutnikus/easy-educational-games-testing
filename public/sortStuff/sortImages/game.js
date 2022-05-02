@@ -51,9 +51,7 @@ function createNewGameButton() {
 }
 
 function getSliderValue() {
-    const value = slider.getValue()
-    const range = MAX_SLIDER-MIN_SLIDER
-    return Math.floor(value*range)+MIN_SLIDER
+    return slider.getValue()
 }
 
 function onSliderChange() {
@@ -65,13 +63,15 @@ function onSliderChange() {
 function createSlider() {
     const slider = game.createRangeSlider({
         width:SLIDER_WIDTH,
-        level:Number.POSITIVE_INFINITY
+        level:Number.POSITIVE_INFINITY,
+        min: MIN_SLIDER,
+        max: MAX_SLIDER
     })
     slider.setPosition(
         canvas.width-SB_WIDTH-NGB_WIDTH-SLIDER_WIDTH/2-SPACING*5,
         PANEL_HEIGHT/4
     )
-    slider.setValue(0,false)
+    slider.setValue(MIN_SLIDER,false)
     slider.addOnChangeListener(onSliderChange)
 
     return slider
