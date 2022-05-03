@@ -319,36 +319,21 @@ function testGameCanvas() {
 
 // uncomment this to test drawables
 function testDrawables() {
-    const element = game.createElement({clickable:true,draggable:true, name:"test",level:5})
-    element.setPosition(300,300)
+    const e1 = game.createElement({clickable:true,draggable:true})
+    e1.setPosition(100,100)
+    e1.createGif("jump",{width:200,height:200,stagger:1})
 
-    // const gif = element.createGif("jump",{width:200,height:200,stagger:1})
-    // const img = element.createImage('frog.png',{width:100,height:100})
-    // const rect = element.createShape("rectangle",{width:500,rotation:0.3})
-    // const oval = element.createShape("oval",{rx:100})
-    // const poly = element.createShape("polygon",{coords:[-100,-5,10,-10,30,30]})
-    // const line = element.createShape("line",{coords:[-100,-5,10,-10,30,30]})
-    // const text = element.createText("Hewwo uwu")
+    const e2 = game.createElement({clickable:true,draggable:true})
+    e2.setPosition(500,100)
+    e2.createImage('frog.png',{width:100,height:100})
 
-    // element.addChild(new G.GameText('text',{level:10,dx:-100,rotation:-0.3}))
-    // element.addChild(new G.GameText('text',{level:10,dx:100,rotation:-0.3,hScale:-1}))
-    // element.addChild(new G.GameShape('rectangle',{width:100,height:50,dx:-100,fill:'red',stroke:'black',level:0,rotation:0}))
-    // element.addChild(new G.GameShape('rectangle',{width:100,height:200,stroke:'black',fill:'red',lineWidth:2,level:1,rotation:0.3}))
-    // element.addChild(new G.GameText('level1',{level:1}))
-    // element.addChild(new G.GameShape('oval',{rx:100,ry:50,fill:'red',level:1,stroke:'black',lineWidth:20,rotation:Math.PI/2}))
-    // element.addChild(new G.GameShape('oval',{rx:50,ry:20,dx:200, dy:200,fill:'blue',level:1,rotation:0.4}))
-    // element.addChild(new G.GameShape('polygon',{name:'poly center',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3}))
-    // element.addChild(new G.GameShape('polygon',{name:'poly center mirrored',level:6, coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3,hScale:-1}))
-    // element.addChild(new G.GameShape('polygon',{name:'poly right',level:6,dx:200, coords:[-100,-5,10,-10,30,30],fill:'red',rotation:1}))
-    // element.addChild(new G.GameShape('line',{level:6, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'black',lineWidth:50,}))
-    // element.addChild(new G.GameShape('line',{level:7, coords:[-100,-5,10,-10,30,30,200,-200],stroke:'red',lineWidth:2,}))
-    // element.addChild(new G.GameImage('frog.png',{name:'frog1',dy:100,level:0,width:100,height:100,rotation:0}))
-    // element.addChild(new G.GameImage('frog.png',{name:'frog3',dy:100,level:0,width:100,height:100,rotation:Math.PI}))
-    // element.addChild(new G.GameImage('frog.png',{name:'frog2',level:0,dx:200,dy:200,width:200,height:100,rotation:-0.8}))
-    // element.addChild(new G.GameGif('jump',{level:0,width:400,height:200,stagger:0}))
-    // element.addChild(new G.GameGif('jump',{level:0,width:400,height:200,stagger:0,hScale:-1}))
-    // element.addChild(new G.GameGif('colors',{level:-1,stagger:10,width:600,height:600}))
+    const e3 = game.createElement({clickable:true,draggable:true})
+    e3.setPosition(100,500)
+    e3.createShape("polygon",{coords:[-100,-5,10,-10,30,30]})
 
+    const e4 = game.createElement({clickable:true,draggable:true})
+    e4.setPosition(500,500)
+    e4.createText("Ahoj :)")
 }
 // testDrawables()
 
