@@ -319,13 +319,13 @@ function testGameCanvas() {
 
 // uncomment this to test drawables
 function testDrawables() {
+    game.clear()
+
     const e1 = game.createElement({clickable:true,draggable:true})
     e1.setPosition(100,100)
     e1.createGif("jump",{width:200,height:200,stagger:1})
 
-    const e2 = game.createElement({clickable:true,draggable:true})
-    e2.setPosition(500,100)
-    e2.createImage('frog.png',{width:100,height:100})
+    e1.createImage('frog.png',{width:100,height:100, dx:400})
 
     const e3 = game.createElement({clickable:true,draggable:true})
     e3.setPosition(100,500)
@@ -994,6 +994,7 @@ testIntegerSlider()
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
     createHTMLbutton("Pogs",pogs)
+    createHTMLbutton("Drawables",testDrawables)
     createHTMLbutton("Connect Boxes",testConnectBoxes)
     createHTMLbutton("Text Input",testTextInput)
     createHTMLbutton("Element Composite",testComposite)
