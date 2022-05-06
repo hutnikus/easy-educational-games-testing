@@ -71,7 +71,7 @@ function moveFrog(event,dir) {
             this.move(direction[dir])
         } else {
             alert(`Congrats! You made it to ${currentScore} points!`)
-            frogFlyGame()
+            resetGame()
         }
     } catch (e) {
         if (!(e instanceof RangeError)) {
@@ -149,22 +149,35 @@ function cricketLoop() {
     }
 }
 
+function resetGame() {
+    game.clear()
+
+    grid = createGrid()
+    frogElement = createFrogElement()
+    flyElement = createFlyElement()
+    currentScore = 0
+    scoreText = createScoreElementText()
+    arrowsElements = createArrowsElements()
+    storks = []
+    shuffleButton = createShuffleButton()
+}
+
 //////////////////////////////////////////////////
 
 const stagger = 5
-const grid = createGrid()
-const frogElement = createFrogElement()
-const flyElement = createFlyElement()
+let grid = createGrid()
+let frogElement = createFrogElement()
+let flyElement = createFlyElement()
 let currentScore = 0
-const scoreText = createScoreElementText()
+let scoreText = createScoreElementText()
 const arrowsSettings = [    {direction: "up", position: [300,25], coords: [0,-25,-100,25,100,25]},
     {direction: "left", position: [25,300], coords: [-25,0,25,-100,25,100]},
     {direction: "down", position: [300,575], coords: [0,25,-100,-25,100,-25]},
     {direction: "right", position: [575,300], coords: [25,0,-25,-100,-25,100]}    ]
-const arrowsElements = createArrowsElements()
-const storks = []
+let arrowsElements = createArrowsElements()
+let storks = []
 const shuffleSound = new Audio("resources/croak.mp3")
-const shuffleButton = createShuffleButton()
+let shuffleButton = createShuffleButton()
 
 // let playing = true
 // const crickets = new Audio("resources/cricket.mp3")

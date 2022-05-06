@@ -991,6 +991,34 @@ function testIntegerSlider() {
 }
 testIntegerSlider()
 
+function testCompositeManipulation() {
+    game.clear()
+
+    const e1 = game.createElement({draggable:true,level:0})
+    e1.createShape("rectangle",{fill:"green"})
+    e1.setPosition(250,250)
+
+    const e2 = game.createElement({draggable:true,level:1})
+    e2.createShape("rectangle",{fill:"blue"})
+
+    const e3 = game.createElement({draggable:true,level:2})
+    e3.createShape("rectangle",{fill:"red"})
+    e3.setPosition(350,350)
+
+    const e4 = game.createElement({draggable:true,level:2})
+    e4.createShape("rectangle",{fill:"black"})
+    e4.setPosition(400,400)
+
+    const c1 = game.createComposite({draggable:true,level:3})
+    c1.addElements(e1,e2)
+
+    const c2 = game.createComposite({draggable:true,level:4})
+    c2.addElements(c1,e3,e4)
+
+    c1.reset()
+}
+// testCompositeManipulation()
+
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
     createHTMLbutton("Pogs",pogs)
