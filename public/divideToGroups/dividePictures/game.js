@@ -51,14 +51,14 @@ function createAreas() {
     fruitArea.createShape("rectangle", {width:canvas.width/2 - SPACE,height:canvas.height*(2/3) - SPACE,
         stroke:"black",lineWidth:5,fill:"#ffe8c8"
     })
-    fruitArea.createText("fruit",{dy:20+(SPACE/2)-canvas.height/3,font:"30px Comic Sans MS"})
+    fruitArea.createText("ovocie",{dy:20+(SPACE/2)-canvas.height/3,font:"30px Comic Sans MS"})
     fruitArea.setPosition(canvas.width/4,canvas.height*(2/3))
 
     const vegetableArea = game.createElement({level:-1,name:"vegetableArea",clickable:true})
     vegetableArea.createShape("rectangle", {width:canvas.width/2 - SPACE,height:canvas.height*(2/3) - SPACE,
         stroke:"black",lineWidth:5,fill:"#ffe8c8"
     })
-    vegetableArea.createText("vegetables",{dy:20+(SPACE/2)-canvas.height/3,font:"30px Comic Sans MS"})
+    vegetableArea.createText("zelenina",{dy:20+(SPACE/2)-canvas.height/3,font:"30px Comic Sans MS"})
     vegetableArea.setPosition(canvas.width*(3/4),canvas.height*(2/3))
     return {
         fruit: fruitArea,
@@ -106,7 +106,7 @@ function onFinishDragging() {
 
 function createWinText() {
     const element = game.createElement()
-    return element.createText("Nice job!",{font:"100px Comic Sans MS",dy:-canvas.height/3,visible:false})
+    return element.createText("Máš to dobre!",{font:"100px Comic Sans MS",dy:-canvas.height/3,visible:false})
 }
 
 function gameFinish() {
@@ -121,7 +121,7 @@ function resetGame() {
     }
     winText.visible = false
 
-    visibleElements = randomElements(5)
+    visibleElements = randomElements(10)
     placeVisibleElements()
 }
 
@@ -174,3 +174,9 @@ const resetButton = createResetButton()
 const elements = createElements()
 let visibleElements
 resetGame()
+
+game.addOnMouseDownListener(function (event) {
+    if (event.buttons === 4) {
+        game.screenShot()
+    }
+})

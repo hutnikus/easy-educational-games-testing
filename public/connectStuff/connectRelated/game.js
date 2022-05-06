@@ -11,7 +11,7 @@ const game = new Game(canvas);
 
 function createStringElement() {
     const stringElement = game.createElement()
-    stringElement.createText("Connect images that relate to each other")
+    stringElement.createText("Spoj obrázky, ktoré sa k sebe hodia.")
     return stringElement
 }
 
@@ -55,7 +55,7 @@ function newGame() {
 }
 
 function createNewGameButton() {
-    const newGameButton = game.createButton({text:"NEW GAME",action:newGame})
+    const newGameButton = game.createButton({text:"Nová hra",action:newGame})
 
     newGameButton.setPosition(canvas.width-52,canvas.height-27)
     return newGameButton
@@ -131,3 +131,9 @@ let visibleImages = undefined
 const elements = createElementArray()
 
 newGame()
+
+game.addOnMouseDownListener(function (event) {
+    if (event.buttons === 4) {
+        game.screenShot()
+    }
+})
