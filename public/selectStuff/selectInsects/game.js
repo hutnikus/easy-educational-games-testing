@@ -25,11 +25,12 @@ function createSelectionAreaElement() {
 }
 
 function createConditionText() {
-    return selectionAreaElement.createText("Which insect has a stinger?",{dy:-110,font:"20px Comic Sans MS"})
+    return selectionAreaElement.createText("",{dy:-110,font:"20px Comic Sans MS"})
 }
 
 function createSubmitButton() {
-    const submitButton = game.createButton({text:"submit",width:50,height:30,action:submitSolution,level:Number.POSITIVE_INFINITY})
+    const submitText = (language === "sk")? "hotovo" : "submit"
+    const submitButton = game.createButton({text:submitText,width:50,height:30,action:submitSolution,level:Number.POSITIVE_INFINITY})
     submitButton.setPosition(canvas.width/2 + 225,canvas.height/2 - 110)
     submitButton.textDrawable.font = "15px Comic Sans MS"
     return submitButton
@@ -41,7 +42,10 @@ function submitSolution() {
 
     //je nieco oznacene?
     if (selected.length === 0) {
-        alert("You didn't select anything...")
+        const text = (language === "sk") ?
+            "Nič si neoznačil" :
+            "You didn't select anything..."
+        alert(text)
         return
     }
 
@@ -50,20 +54,29 @@ function submitSolution() {
         if (!required.includes(selName)) {
             incorrectAudio.currentTime = 0
             incorrectAudio.play()
-            alert("There is a wrong image selected!")
+            const text = (language === "sk") ?
+                "Máš tam nesprávny obrázok!" :
+                "There is a wrong image selected!"
+            alert(text)
             return
         }
     }
     //su tam vsetky?
     for (const reqName of required) {
         if (!selected.includes(reqName)) {
-            alert("Good going, but you're missing something!")
+            const text = (language === "sk") ?
+                "Skoro dobre, ešte ti tam niečo chýba!" :
+                "Good going, but you're missing something!"
+            alert(text)
             return
         }
     }
     correctAudio.currentTime = 0
     correctAudio.play()
-    alert("Very nice! :)")
+    const text = (language === "sk") ?
+        "Pekne! :)" :
+        "Very nice! :)"
+    alert(text)
     loadRandomNewCondition()
 }
 
@@ -158,26 +171,53 @@ const insects = [
 
 const conditions = [
     {
-        question: "Which insect has a stinger?",
+        get question() {
+            if (language === "sk") {
+                return "Ktorý hmyz má žihadlo?"
+            }
+            return "Which insect has a stinger?"
+        },
         elements: ["vcela","osa"]
     },
     {
-        question: "Which insect makes a noise?",
+        get question() {
+            if (language === "sk") {
+                return "Ktorý hmyz robí zvuk?"
+            }
+            return "Which insect makes a noise?"
+        },
         elements: ["osa","vcela","mucha","cvrcek","lucny_konik","komar"]
     },
     {
-        question: "Which insect lives in a community?",
+        get question() {
+            if (language === "sk") {
+                return "Ktorý hmyz žije v komunite?"
+            }
+            return "Which insect lives in a community?"
+        },
         elements: ["vcela", "mravec", "osa"]
     },
     {
-        question: "Which insect lives close to water?",
+        get question() {
+            if (language === "sk") {
+                return "Ktorý hmyz žije blízko vody?"
+            }
+            return "Which insect lives close to water?"
+        },
         elements: ["komar", "vazka"]
     },
     {
-        question: "Which insect is annoying or dangerous?",
+        get question() {
+            if (language === "sk") {
+                return "Ktorý hmyz je otravný alebo nebezpečný?"
+            }
+            return "Which insect is annoying or dangerous?"
+        },
         elements: ["mucha", "komar", "osa"]
     }
 ]
+
+let language = "sk"
 
 let currentCondition = undefined
 const backgroundElement = createBackgroundElement()
@@ -191,3 +231,9 @@ const correctAudio = new Audio("/resources/win2.mp3")
 const incorrectAudio = new Audio("/resources/lose2.mp3")
 
 loadRandomNewCondition()
+
+game.addOnMouseDownListener(function (event) {
+    if (event.buttons === 4) {
+        game.screenShot()
+    }
+})

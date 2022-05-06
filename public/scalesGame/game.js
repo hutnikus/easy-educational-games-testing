@@ -84,13 +84,13 @@ function winCondition() {
         // win
         winAudio.currentTime = 0
         winAudio.play()
-        winText.text = "YOU WIN!"
+        winText.text = "SPRÁVNE!"
         winText.color = "green"
     } else if (leftBucketValue < rightBucketValue) {
         // lose
         loseAudio.currentTime = 0
         loseAudio.play()
-        winText.text = "YOU LOSE!"
+        winText.text = "NESPRÁVNE!"
         winText.color = "red"
     }
     numberCards.forEach(card=>{
@@ -148,14 +148,14 @@ function resetGame(num) {
 }
 
 function createAgainButton() {
-    const againButton = game.createButton({text:"TRY AGAIN",color:"yellow"})
+    const againButton = game.createButton({text:"ZNOVA",color:"yellow"})
     againButton.setPosition(100,450)
     againButton.addOnButtonPressListener(function () {resetGame(leftBucketValue)})
     return againButton
 }
 
 function createNewGameButton() {
-    const newGameButton = game.createButton({text:"NEW GAME",color:"green"})
+    const newGameButton = game.createButton({text:"NOVÁ HRA",color:"green"})
     newGameButton.setPosition(500,450)
     newGameButton.addOnButtonPressListener(function () {resetGame(Math.floor(Math.random()*20+5))})
     return newGameButton
@@ -187,7 +187,7 @@ let rightBucketValue = 0
 
 setScaleAngle(0)
 
-const winText = game.createElement({level:10}).createText("",{font:"100px arial",color:"green"})
+const winText = game.createElement({level:10}).createText("",{font:"100px arial",color:"green", maxWidth:550})
 
 const winAudio = new Audio("/resources/win2.mp3")
 const loseAudio = new Audio("/resources/lose3.mp3")
@@ -197,3 +197,9 @@ const againButton = createAgainButton()
 const newGameButton = createNewGameButton()
 
 // const slider = createAngleTestingSlider()
+
+game.addOnMouseDownListener(function (event) {
+    if (event.buttons === 4) {
+        game.screenShot()
+    }
+})

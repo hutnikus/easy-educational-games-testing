@@ -218,14 +218,20 @@ const settings = [
         correct: "hokejka"
     },
 ]
+
+let language = "sk"
+
 const MAX_SCORE = 9
 const IMAGE_SIZE = 100
-const NEXT_TEXT = "Next task"
-const RESET_TEXT = "Play again"
+const NEXT_TEXT = (language === "sk")? "Ďalšia úloha" : "Next task"
+const RESET_TEXT = (language === "sk")? "Hrať znova" :"Play again"
 const correctAudio = new Audio("/resources/win1.mp3")
 const incorrectAudio = new Audio("/resources/lose2.mp3")
 
-const headerText = createHeaderText("Choose image that doesn't belong.")
+const headerText = createHeaderText((language === "sk")?
+    "Vyber obrázok, ktorý tam nepatrí." :
+    "Choose image that doesn't belong."
+)
 const scoreCounter = createScoreCounter(MAX_SCORE)
 const nextButton = createNextButton()
 const elements = createAllElements()
@@ -234,3 +240,9 @@ let visibleElements = undefined
 let availableSettings = []
 let currentTask = 0
 resetGame()
+
+game.addOnMouseDownListener(function (event) {
+    if (event.buttons === 4) {
+        game.screenShot()
+    }
+})

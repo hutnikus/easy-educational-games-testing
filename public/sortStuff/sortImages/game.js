@@ -24,7 +24,7 @@ function createPanel() {
 
 function createSolveButton() {
     const button = game.createButton({
-        text:"Solve",
+        text:solveText,
         height:PANEL_HEIGHT-SPACING*2,
         width:SB_WIDTH,
         level:Number.POSITIVE_INFINITY,
@@ -38,7 +38,7 @@ function createSolveButton() {
 
 function createNewGameButton() {
     const button = game.createButton({
-        text:"New Game",
+        text:newGameText,
         height:PANEL_HEIGHT-SPACING*2,
         width:NGB_WIDTH,
         level:Number.POSITIVE_INFINITY,
@@ -57,7 +57,7 @@ function getSliderValue() {
 function onSliderChange() {
     const value = getSliderValue()
 
-    sliderText.getChildByName("text").text = `quantity: ${value}`
+    sliderText.getChildByName("text").text = `${quantityText}: ${value}`
 }
 
 function createSlider() {
@@ -79,7 +79,7 @@ function createSlider() {
 
 function createSliderText() {
     const element = game.createElement({level:Number.POSITIVE_INFINITY})
-    element.createText("quantity: 4",{font:"15px arial",name:"text"})
+    element.createText(`${quantityText}: 4`,{font:"15px arial",name:"text"})
 
     element.setPosition(
         canvas.width-SB_WIDTH-NGB_WIDTH-SLIDER_WIDTH/2-SPACING*5,
@@ -119,19 +119,19 @@ function setSortOrder(order) {
     if (order === "hAsc") {
         img.rotation = 0
         img.hScale = 1
-        changeHeaderText("Order the images from smallest to biggest!")
+        changeHeaderText(headerTextAsc)
     } else if (order === "hDesc") {
         img.rotation = 0
         img.hScale = -1
-        changeHeaderText("Order the images from biggest to smallest!")
+        changeHeaderText(headerTextDesc)
     } else if (order === "vAsc") {
         img.rotation = Math.PI/2
         img.hScale = 1
-        changeHeaderText("Order the images from smallest to biggest!")
+        changeHeaderText(headerTextAsc)
     } else if (order === "vDesc") {
         img.rotation = -Math.PI/2
         img.hScale = -1
-        changeHeaderText("Order the images from biggest to smallest!")
+        changeHeaderText(headerTextDesc)
     } else {
         throw new Error("Incorrect order!")
     }
@@ -188,7 +188,7 @@ function createHlineElements(qty) {
         })
         array.push(element)
     }
-    const shuffled = [...array].sort((a, b) => Math.random()-0.5)
+    const shuffled = shuffleArray(array)
     for (const i in shuffled) {
         const img = shuffled[i].getChildByName("img")
         shuffled[i].setPosition(
@@ -293,6 +293,30 @@ function solve() {
     }
 }
 
+function setLanguage(lang) {
+    if (lang === "sk") {
+        correctMsg = ["Úžasné!","Správne!","Zoraďovanie ti ide!","Dobrá práca!"]
+        incorrectMsg = ["Nemáš to správne, skús znova!","Niečo je uložené nesprávne, skús to nájsť!","Nesprávne!"]
+
+        headerTextAsc = "Zoraď obrázky od najmenšieho po najväčší!"
+        headerTextDesc = "Zoraď obrázky od najväčšieho po najmenší!"
+
+        quantityText = "Počet"
+        newGameText = "Nová Hra"
+        solveText = "Vyriešené"
+    } else if (lang === "en") {
+        correctMsg = ["Awesome!","Amazing!","You're really good at sorting!","Nice job!"]
+        incorrectMsg = ["It's not correct, try again!","Something's placed wrong, try to find it!","Incorrect!"]
+
+        headerTextAsc = "Order the images from smallest to biggest!"
+        headerTextDesc = "Order the images from biggest to smallest!"
+
+        quantityText = "Quantity"
+        newGameText = "New Game"
+        solveText = "Solved"
+    }
+}
+
 ////////////////////////////////////////////////////
 
 const PANEL_HEIGHT = 40
@@ -322,8 +346,9 @@ const settings = [
         images:undefined,
     }
 ]
-const correctMsg = ["Awesome!","Amazing!","You're really good at sorting!","Nice job!"]
-const incorrectMsg = ["It's not correct, try again!","Something's placed wrong, try to find it!","Incorrect!"]
+let correctMsg,incorrectMsg,headerTextAsc,headerTextDesc,quantityText,newGameText, solveText
+
+setLanguage("sk")
 
 const panel = createPanel()
 const headerText = createHeaderText()
@@ -340,3 +365,9 @@ let currentOrdering = undefined
 let timeout = undefined
 
 loadRandomSetting()
+
+game.addOnMouseDownListener(function (event) {
+    if (event.buttons === 4) {
+        game.screenShot()
+    }
+})
