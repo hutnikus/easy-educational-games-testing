@@ -1015,9 +1015,43 @@ function testCompositeManipulation() {
     const c2 = game.createComposite({draggable:true,level:4})
     c2.addElements(c1,e3,e4)
 
-    c1.reset()
+    let angle1 = 0
+    const slider1 = game.createRangeSlider({min:0,max:Math.PI*2,floating:true,width:400})
+    slider1.setPosition(300,20)
+    slider1.setValue(0)
+    slider1.addOnChangeListener(function () {
+        const composite = c1
+
+        composite.rotateElements(new G.Point(300,300),-angle1)
+        angle1 = this.getValue()
+        composite.rotateElements(new G.Point(300,300),angle1)
+    })
+
+    let angle2 = 0
+    const slider2 = game.createRangeSlider({min:0,max:Math.PI*2,floating:true,width:400})
+    slider2.setPosition(300,50)
+    slider2.setValue(0)
+    slider2.addOnChangeListener(function () {
+        const composite = c2
+
+        composite.rotateElements(new G.Point(300,300),-angle2)
+        angle2 = this.getValue()
+        composite.rotateElements(new G.Point(300,300),angle2)
+    })
+
+    let angle3 = 0
+    const slider3 = game.createRangeSlider({min:0,max:Math.PI*2,floating:true,width:400})
+    slider3.setPosition(300,80)
+    slider3.setValue(0)
+    slider3.addOnChangeListener(function () {
+        const composite = c2
+
+        composite.rotateElements(new G.Point(300,300),-angle3,true)
+        angle3 = this.getValue()
+        composite.rotateElements(new G.Point(300,300),angle3,true)
+    })
 }
-// testCompositeManipulation()
+testCompositeManipulation()
 
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
@@ -1035,6 +1069,7 @@ function testFunctionCallsButtons() {
     createHTMLbutton("Animate To",testAnimateTo)
     createHTMLbutton("Grid",testGrid)
     createHTMLbutton("Integer Slider",testIntegerSlider)
+    createHTMLbutton("Nested Composites",testCompositeManipulation)
 }
 testFunctionCallsButtons()
 
