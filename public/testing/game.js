@@ -1009,3 +1009,9 @@ function testFunctionCallsButtons() {
     createHTMLbutton("Integer Slider",testIntegerSlider)
 }
 testFunctionCallsButtons()
+
+game.addOnMouseDownListener(function (event) {
+    if (event.buttons === 4) {
+        game.screenShot()
+    }
+})

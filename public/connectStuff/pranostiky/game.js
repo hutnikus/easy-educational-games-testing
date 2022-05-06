@@ -145,10 +145,17 @@ function onFinishDragging() {
 function resetGame() {
     game.clear()
 
+    newGameButton = createNewGameButton()
     //zamiesaj a vyber pocet
     remainingSentences = randomSelection(pranostiky,5)
     //vykresli
     createShapesFromArray(remainingSentences)
+}
+
+function createNewGameButton() {
+    const button = game.createButton({text:"Nová Hra",color:"orange",action:resetGame})
+    button.setPosition(50,25)
+    return button
 }
 
 const pranostiky = [
@@ -166,5 +173,12 @@ const pranostiky = [
 
 let remainingSentences = []
 const correctAudio = new Audio("/resources/win1.mp3")
+let newGameButton = createNewGameButton()
 
 resetGame()
+
+game.addOnMouseDownListener(function (event) {
+    if (event.buttons === 4) {
+        game.screenShot()
+    }
+})
