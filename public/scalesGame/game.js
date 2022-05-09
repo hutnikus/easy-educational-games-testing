@@ -184,7 +184,7 @@ const buckets = createBucketsComposite()
 let currentRotation = 0
 let leftBucketValue = 15
 let rightBucketValue = 0
-
+//
 setScaleAngle(0)
 
 const winText = game.createElement({level:10}).createText("",{font:"100px arial",color:"green", maxWidth:550})
@@ -195,11 +195,11 @@ const loseAudio = new Audio("/resources/lose3.mp3")
 const numberCards = createNumberCards()
 const againButton = createAgainButton()
 const newGameButton = createNewGameButton()
-
-// const slider = createAngleTestingSlider()
-
-game.addOnMouseDownListener(function (event) {
-    if (event.buttons === 4) {
-        game.screenShot()
-    }
-})
+//
+// // const slider = createAngleTestingSlider()
+//
+// game.addOnMouseDownListener(function (event) {
+//     if (event.buttons === 4) {
+//         game.screenShot()
+//     }
+// })

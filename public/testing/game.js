@@ -1010,9 +1010,11 @@ function testCompositeManipulation() {
     e4.setPosition(400,400)
 
     const c1 = game.createComposite({draggable:true,level:3})
+    c1.setPosition(...e1.center.asArray())
     c1.addElements(e1,e2)
 
     const c2 = game.createComposite({draggable:true,level:4})
+    c2.setPosition(...c1.center.asArray())
     c2.addElements(c1,e3,e4)
 
     let angle1 = 0
