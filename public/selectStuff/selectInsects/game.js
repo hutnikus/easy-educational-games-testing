@@ -81,19 +81,18 @@ function submitSolution() {
 }
 
 function loadCondition(number) {
-    for (const i in elementArray) {
-        setElementPosition(i,elementArray,positionArray)
-    }
+    elementArray.forEach(element => element.home())
 
     currentCondition = conditions[number]
     conditionText.text = currentCondition.question
 }
 
 function createElementArray (nameArray) {
+    const positionArray = createPostitionArray()
     const retval = []
-    for (const name of nameArray) {
-        const element = game.createElement({draggable:true,name:name,clickable:true})
-        element.createImage(name + ".png")
+    for (const i in nameArray) {
+        const element = game.createElement({draggable:true,name:nameArray[i],clickable:true,x:positionArray[i][0],y:positionArray[i][1]})
+        element.createImage(nameArray[i] + ".png")
         retval.push(element)
 
         element.addOnFinishDraggingListener(onFinishDragging)
@@ -121,22 +120,13 @@ function createPostitionArray() {
     return positions
 }
 
-function setElementPosition(index) {
-    elementArray[index].setPosition(...positionArray[index])
-}
-
-function findElementPosition(element) {
-    return elementArray.indexOf(element)
-}
-
 function isInsideArea(element) {
     return selectionAreaElement.isInside(element.center)
 }
 
 function onFinishDragging() {
     if (!isInsideArea(this,selectionAreaElement)) {
-        const index = findElementPosition(this)
-        setElementPosition(index, elementArray, positionArray)
+        this.home()
     }
 }
 
@@ -225,7 +215,6 @@ const selectionAreaElement = createSelectionAreaElement()
 const conditionText = createConditionText()
 const submitButton = createSubmitButton()
 const elementArray = createElementArray(insects)
-const positionArray = createPostitionArray()
 let unplayedConditions = [...conditions.keys()]
 const correctAudio = new Audio("/resources/win2.mp3")
 const incorrectAudio = new Audio("/resources/lose2.mp3")

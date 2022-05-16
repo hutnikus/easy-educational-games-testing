@@ -102,9 +102,8 @@ function createNumberCards() {
     const numberCards = []
 
     for (let i = 1; i < 10; i++) {
-        const numberCard = game.createElement({draggable:true})
+        const numberCard = game.createElement({draggable:true,x:50+i*50,y:550})
         numberCards.push(numberCard)
-        numberCard.setPosition(50+i*50,550)
         numberCard.createShape("rectangle",{width:30,height:30,fill:"tan",stroke:"black"})
         numberCard.createText(`${i}`)
         numberCard.addOnFinishDraggingListener(function () {
@@ -120,7 +119,7 @@ function createNumberCards() {
 
                 winCondition()
             } else {
-                this.setPosition(50+i*50,550)
+                this.home()
             }
         })
     }

@@ -1,5 +1,5 @@
 // working code
-import {Game, randomSelection} from "/modules/index.js"
+import {Game, randomSelection, Point} from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
@@ -17,7 +17,6 @@ function createElements() {
         const el = game.createElement({draggable:true,clickable:true,name:name})
         el.createImage(name + ".png")
 
-        el.addOnClickListener(onClick)
         el.addOnFinishDraggingListener(onFinishDragging)
 
         elements.push(el)
@@ -32,7 +31,7 @@ function randomElements(number) {
 
 function placeVisibleElements() {
     for (const element of visibleElements) {
-        element.setPosition(
+        element.center = element.homePosition = new Point(
             (Math.random()*(canvas.width - 100)) + 50,
             (Math.random()*(canvas.height/3 - 100)) + 50,
         )
@@ -82,13 +81,9 @@ function insideCorrectArea(element) {
     return area.isInside(element.center)
 }
 
-function onClick() {
-    this.lastPosition = this.center
-}
-
 function onFinishDragging() {
     if (!insideCorrectArea(this)) {
-        this.center = this.lastPosition
+        this.home()
         incorrectAudio.currentTime = 0
         incorrectAudio.play()
         return

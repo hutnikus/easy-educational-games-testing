@@ -1,5 +1,5 @@
 // working code
-import {Game, Point, GameElement, GameShape, GameText, GameGif, GameImage, GameHitbox} from "/modules/index.js"
+import {Game, Point, GameElement, GameShape, GameText, GameGif, GameImage, GameHitbox, randomInt, removeFromArray,randomSelection} from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
@@ -1082,8 +1082,31 @@ function testAveragePoints() {
     e2.addOnDragListener(updateCenter)
     e3.addOnDragListener(updateCenter)
 }
-testAveragePoints()
+// testAveragePoints()
 
+function testHomePosition() {
+    game.clear()
+    const element = game.createElement({draggable:true})
+    element.createShape("rectangle",{fill:"green"})
+    element.addOnFinishDraggingListener(function () {
+        this.home()
+    })
+
+    // element.setHome(100,100)
+}
+testHomePosition()
+
+function testMiscFunctions() {
+    console.log(randomInt(-1,1))
+    const array = ["a","b","c","a","b","c","a","b","c"]
+    removeFromArray(array,"a",true)
+    console.log(array)
+
+    const charArray = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"]
+    console.log(randomSelection(charArray,3))
+
+}
+// testMiscFunctions()
 
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
@@ -1103,6 +1126,7 @@ function testFunctionCallsButtons() {
     createHTMLbutton("Integer Slider",testIntegerSlider)
     createHTMLbutton("Nested Composites",testCompositeManipulation)
     createHTMLbutton("Average Points",testAveragePoints)
+    createHTMLbutton("Home Position",testHomePosition)
 }
 testFunctionCallsButtons()
 
