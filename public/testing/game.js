@@ -7,21 +7,7 @@ const canvas = document.getElementById('game');
 canvas.width = 600;
 canvas.height = 600;
 
-const center = new Point(
-    canvas.width/2,
-    canvas.height/2
-)
-
 const game = new Game(canvas);
-
-function checkCollisions(obj) {
-    const collisions = game.checkCollisions(obj).map((obj)=>obj.name)
-    console.log(collisions)
-}
-
-function rotateElement(el) {
-    el.rotation += 0.01
-}
 
 function createHTMLbutton(text,callback) {
     const button = document.createElement('button')
@@ -170,122 +156,32 @@ function spirograph() {
 }
 // spirograph()
 
-// test drag and drop function
-function dragDrop() {
-    const element1 = new GameElement(center,
-        [
-            new GameText('1', {level: 2}),
-            new GameShape('oval', {
-                rx: 100,
-                ry: 100,
-                fill: 'red',
-                level: 1,
-                rotation: 0.2,
-                stroke: 'black',
-                lineWidth: 20
-            }),
-        ],
-        {clickable: true, draggable:true, name: '1-red', level: 10}
-    )
-    game.addElement(element1)
-
-    function onClick() {
-        console.log('you touched me ( ͡° ͜ʖ ͡°)')
-        console.log('last mouse pos', undefined)
-    }
-
-    function onDrag() {
-        console.log('wheeeee')
-    }
-
-    function onFinish() {
-        console.log('thanks for putting me down at', element1.center.asString())
-    }
-
-    element1.addOnClickListener(onClick)
-    element1.addOnFinishDraggingListener(onFinish)
-    element1.addOnDragListener(onDrag)
-}
-// dragDrop()
-
 // colorful circle objects to test clicking or drawing
 function pogs() {
     game.clear()
 
-    const element1 = game.createElement({clickable: true, draggable:true, name: '1-red', level: 10,hitboxVisible:true})
-    element1.addHitbox(100)
-    element1.setPosition(250,250)
-    element1.createText('1', {level: 2})
-    element1.createShape('oval', {rx: 100,ry: 100, fill: 'red', level: 1, stroke: 'black', lineWidth: 20})
-
-    const element2 = game.createElement({clickable: true, draggable:true, name: '2-blue', level: 10,hitboxVisible:true})
-    element2.addHitbox(100)
-    element2.setPosition(350,250)
-    element2.createText('2', {level: 2})
-    element2.createShape('oval', {rx: 100,ry: 100, fill: 'blue', level: 1, stroke: 'black', lineWidth: 20})
-
-    const element3 = game.createElement({clickable: true, draggable:true, name: '3-green', level: 10,hitboxVisible:true})
-    element3.addHitbox(100)
-    element3.setPosition(250,350)
-    element3.createText('3', {level: 2})
-    element3.createShape('oval', {rx: 100,ry: 100, fill: 'green', level: 1, stroke: 'black', lineWidth: 20})
-
-    const element4 = game.createElement({clickable: true, draggable:true, name: '4-yellow', level: 10,hitboxVisible:true})
-    element4.addHitbox(100)
-    element4.setPosition(350, 350)
-    element4.createText('4', {level: 2})
-    element4.createShape('oval', {rx: 100,ry: 100, fill: 'yellow', level: 1, stroke: 'black', lineWidth: 20})
-
-    const elements = [element1,element2,element3,element4]
-
-    for (const objt of elements) {
-        // THIS IS REPLACED BY game.moveToTopWhenDragging(elements)
-        // const moveToTop = () => {
-        //     game.changeLevelOfElement(objt,game.highestLevel()+1)
-        // }
-        // objt.addOnClickListener(moveToTop)
-
-        const checkCollisions = () => {
-            const collisions = game.checkCollisions(objt).map((obj)=>obj.name)
-            console.log(collisions)
-        }
-        objt.addOnFinishDraggingListener(checkCollisions)
+    function createPog(color,x,y) {
+        const pog = game.createElement({clickable: true, draggable:true, name: `${color}`, hitboxVisible:true})
+        pog.addHitbox(100)
+        pog.setPosition(x,y)
+        pog.createShape('oval', {rx: 100,ry: 100, fill: color, level: 1, stroke: 'black', lineWidth: 20})
+        pog.addOnFinishDraggingListener(function () {
+            console.log(game.checkCollisions(this).map(obj=>obj.name))
+        })
+        return pog
     }
+    const pogs = [
+        ['red',250,250],
+        ['blue',350,250],
+        ['green',250,350],
+        ['yellow',350,350],
+    ]
+
+    const elements = pogs.map((pog)=>createPog(...pog))
 
     game.moveToTopWhenDragging(elements)
 }
 // pogs()
-
-// test display name of clicked object
-function displayClickedName() {
-    function onClick(event) {
-        const mouse = game.getMousePos(event)
-        const clickedElement = game.getElementAtPos(mouse)
-
-        if (clickedElement !== null) {
-            console.log(`Clicked element with name: "${clickedElement.name}"`)
-        }
-    }
-
-    canvas.addEventListener('click',(ev => onClick(ev)))
-}
-// displayClickedName()
-
-// test move clicked object to top
-function moveClickedToTop() {
-    function onClick(event) {
-        const mouse = game.getMousePos(event)
-        const clickedElement = game.getElementAtPos(mouse)
-
-        if (clickedElement !== null) {
-            const highestLevel = Math.max(...game.elements.map(el => el.level))
-            game.changeLevelOfElement(clickedElement,highestLevel+1)
-        }
-    }
-
-    canvas.addEventListener('mousedown',(ev => onClick(ev)))
-}
-// moveClickedToTop()
 
 //test function for G.GameCanvas (but also buttons)
 function testGameCanvas() {
@@ -313,6 +209,10 @@ function testGameCanvas() {
     clearButton.setPosition(300,450)
     clearButton.addOnButtonPressListener(()=>gCanvas.clear())
 
+    function rotateElement(el) {
+        el.rotation += 0.01
+    }
+
     setInterval(()=>rotateElement(gCanvas),20)
 }
 // testGameCanvas()
@@ -336,32 +236,6 @@ function testDrawables() {
     e4.createText("Ahoj :)")
 }
 // testDrawables()
-
-function testCollisions() {
-    const el1 = new GameElement(center.copy().add(new Point(100,0)),
-        [
-            new GameShape('rectangle',{width:100,height:50,fill:'red',stroke:'black',level:0,rotation:0}),
-        ],
-        {clickable:true,draggable:true, name:"test1",level:5,hitboxes:[new GameHitbox(50)],hitboxVisible:true}
-    )
-    game.addElement(el1)
-
-    const el2 = new GameElement(center.copy().subtract(new Point(100,0)),
-        [
-            new GameShape('rectangle',{width:100,height:50,fill:'red',stroke:'black',level:0,rotation:0}),
-        ],
-        {clickable:true,draggable:true, name:"test2",level:5,hitboxes:[new GameHitbox(50),new GameHitbox(20,-70)],hitboxVisible:true}
-    )
-    game.addElement(el2)
-
-    setInterval(()=>rotateElement(el2),20)
-
-    for (const obj of [el1,el2]) {
-        obj.addOnFinishDraggingListener(()=>checkCollisions(obj))
-    }
-
-}
-// testCollisions()
 
 function testKeyboardInput() {
     game.clear()
@@ -439,9 +313,9 @@ function testConnectBoxes() {
         for (let j = 0; j < coordsY.length; j++) {
             const el = game.createElement()
             el.setPosition(coordsX[i],coordsY[j])
-            el.addChild(new GameShape('rectangle',{width:100,height:50,fill:"tan"}))
-            el.addChild(new GameText(values[i][j],{level: 1}))
-            el.addChild(new GameShape("line",{coords:[0,0,0,0],name:"line",level: 2,stroke:'black',lineWidth:2}))
+            el.createShape('rectangle',{width:100,height:50,fill:"tan"})
+            el.createText(values[i][j],{level: 1})
+            el.createShape("line",{coords:[0,0,0,0],name:"line",level: 2,stroke:'black',lineWidth:2})
             el.clickable = true
             el.draggable = true
             el.stationary = true
@@ -449,7 +323,7 @@ function testConnectBoxes() {
 
             const line = game.createElement()
             line.setPosition(coordsX[i],coordsY[j])
-            line.addChild(new GameShape("line",{coords:[0,0,0,0],name:"line",stroke:'black',lineWidth:2}))
+            line.createShape("line",{coords:[0,0,0,0],name:"line",stroke:'black',lineWidth:2})
             line.level = 2
             line.setName(game,`line${values[i][j]}`)
         }
@@ -989,7 +863,7 @@ function testIntegerSlider() {
     floatingSlider.addOnChangeListener(displayValue)
     integerSlider.addOnChangeListener(displayValue)
 }
-testIntegerSlider()
+// testIntegerSlider()
 
 function testCompositeManipulation() {
     game.clear()
@@ -1122,6 +996,7 @@ function testFunctionCallsButtons() {
     createHTMLbutton("WASD+Arrows",testKeyboardInput)
     createHTMLbutton("Area Detection",testMoveToArea)
     createHTMLbutton("Animate To",testAnimateTo)
+    createHTMLbutton("Element Hold",testElementHold)
     createHTMLbutton("Grid",testGrid)
     createHTMLbutton("Integer Slider",testIntegerSlider)
     createHTMLbutton("Nested Composites",testCompositeManipulation)
