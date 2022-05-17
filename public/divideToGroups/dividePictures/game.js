@@ -14,7 +14,7 @@ const game = new Game(canvas);
 function createElements() {
     const elements = []
     for (const name of [...fruits,...vegetables]) {
-        const el = game.createElement({draggable:true,clickable:true,name:name})
+        const el = game.createElement({draggable:true,clickable:true,name:name,keepOnTop:true});
         el.createImage(name + ".png")
 
         el.addOnFinishDraggingListener(onFinishDragging)

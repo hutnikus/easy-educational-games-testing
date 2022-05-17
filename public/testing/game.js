@@ -161,7 +161,7 @@ function pogs() {
     game.clear()
 
     function createPog(color,x,y) {
-        const pog = game.createElement({clickable: true, draggable:true, name: `${color}`, hitboxVisible:true})
+        const pog = game.createElement({clickable: true, draggable:true, name: `${color}`, hitboxVisible:true, keepOnTop:true})
         pog.addHitbox(100)
         pog.setPosition(x,y)
         pog.createShape('oval', {rx: 100,ry: 100, fill: color, level: 1, stroke: 'black', lineWidth: 20})
@@ -179,9 +179,9 @@ function pogs() {
 
     const elements = pogs.map((pog)=>createPog(...pog))
 
-    game.moveToTopWhenDragging(elements)
+    game.createButton({text:"this will always be on top",width:200})
 }
-// pogs()
+pogs()
 
 //test function for G.GameCanvas (but also buttons)
 function testGameCanvas() {
@@ -319,13 +319,13 @@ function testConnectBoxes() {
             el.clickable = true
             el.draggable = true
             el.stationary = true
-            el.setName(game,values[i][j])
+            el.name = values[i][j]
 
             const line = game.createElement()
             line.setPosition(coordsX[i],coordsY[j])
             line.createShape("line",{coords:[0,0,0,0],name:"line",stroke:'black',lineWidth:2})
             line.level = 2
-            line.setName(game,`line${values[i][j]}`)
+            line.name = `line${values[i][j]}`
         }
     }
     for (let i = 0; i < coordsX.length; i++) {
@@ -508,13 +508,13 @@ function testComposite() {
 
     const el2 = game.createElement()
     el2.setPosition(500,300)
-    el2.setName(game,"poly")
+    el2.name = "poly"
     el2.addChild(new GameShape('polygon',{name:'shape', coords:[-100,-5,10,-10,30,30],fill:'red',stroke:'black',rotation:0.3}))
     el2.draggable = true
 
     const el3 = game.createElement()
     el3.setPosition(300,500)
-    el3.setName(game,"jump")
+    el3.name = "jump"
     el3.addChild(new GameGif('jump',{name:"gif",width:100,height:100,stagger:0}))
     el3.draggable = true
 
@@ -968,7 +968,7 @@ function testHomePosition() {
 
     // element.setHome(100,100)
 }
-testHomePosition()
+// testHomePosition()
 
 function testMiscFunctions() {
     console.log(randomInt(-1,1))
@@ -981,6 +981,17 @@ function testMiscFunctions() {
 
 }
 // testMiscFunctions()
+
+function testCreateMovableElements() {
+    game.clear()
+
+    game.addOnMouseDownListener(function (event) {
+        const mouse = this.getMousePos(event)
+        const element = game.createElement({draggable:true,x:mouse.x,y:mouse.y,keepOnTop:true})
+        element.createShape("rectangle",{fill:"random"})
+    })
+}
+testCreateMovableElements()
 
 function testFunctionCallsButtons() {
     createHTMLbutton("CLEAR AREA",()=>game.clear())
@@ -1002,6 +1013,7 @@ function testFunctionCallsButtons() {
     createHTMLbutton("Nested Composites",testCompositeManipulation)
     createHTMLbutton("Average Points",testAveragePoints)
     createHTMLbutton("Home Position",testHomePosition)
+    createHTMLbutton("Create Movable on Click",testCreateMovableElements)
 }
 testFunctionCallsButtons()
 
