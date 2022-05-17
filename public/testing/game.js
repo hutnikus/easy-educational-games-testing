@@ -1,5 +1,5 @@
 // working code
-import {Game, Point, GameElement, GameShape, GameText, GameGif, GameImage, GameHitbox, randomInt, removeFromArray,randomSelection} from "/modules/index.js"
+import {Game, Point, GameElement, GameShape, GameText, GameGif, GameImage, GameHitbox, randomInt, removeFromArray,randomSelection, randomColor} from "/modules/index.js"
 // code completion
 // import * as G from "../../easy-educational-games/public/modules/index.js"
 
@@ -985,11 +985,22 @@ function testMiscFunctions() {
 function testCreateMovableElements() {
     game.clear()
 
-    game.addOnMouseDownListener(function (event) {
+    function createMill(event) {
+        const paths = ["0 0 f 50 l 90 f 20","0 0 r 90 f 50 l 90 f 20","0 0 r 180 f 50 l 90 f 20","0 0 l 90 f 50 l 90 f 20"]
         const mouse = this.getMousePos(event)
-        const element = game.createElement({draggable:true,x:mouse.x,y:mouse.y,keepOnTop:true})
-        element.createShape("rectangle",{fill:"random"})
-    })
+        const el = game.createElement({draggable:true,keepOnTop:true})
+        el.setPosition(mouse.x,mouse.y)
+        const base = el.createShape("polygon",{lineWidth:1, stroke:"black", fill:"brown", coords:[0,0,20,100,-20,100]})
+        const color = randomColor()
+        const arms = paths.map(path =>el.createShape("polygon",{lineWidth:1, stroke:"black", fill:color, path:path}))
+
+        setInterval(()=>rotateArms(arms),30)
+    }
+    function rotateArms(arms) {
+        arms.forEach(arm => arm.rotation += 0.1)
+    }
+
+    game.addOnMouseDownListener(createMill)
 }
 testCreateMovableElements()
 
