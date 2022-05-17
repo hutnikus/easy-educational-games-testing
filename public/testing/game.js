@@ -985,7 +985,11 @@ function testMiscFunctions() {
 function testCreateMovableElements() {
     game.clear()
 
+    let counter = 0
+
     function createMill(event) {
+        counter++
+        console.log(counter)
         const paths = ["0 0 f 50 l 90 f 20","0 0 r 90 f 50 l 90 f 20","0 0 r 180 f 50 l 90 f 20","0 0 l 90 f 50 l 90 f 20"]
         const mouse = this.getMousePos(event)
         const el = game.createElement({draggable:true,keepOnTop:true})
