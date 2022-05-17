@@ -990,13 +990,14 @@ function testCreateMovableElements() {
     function createMill(event) {
         counter++
         console.log(counter)
-        const paths = ["0 0 f 50 l 90 f 20","0 0 r 90 f 50 l 90 f 20","0 0 r 180 f 50 l 90 f 20","0 0 l 90 f 50 l 90 f 20"]
+        const rotations = [0,90,180,270]
         const mouse = this.getMousePos(event)
         const el = game.createElement({draggable:true,keepOnTop:true})
         el.setPosition(mouse.x,mouse.y)
         const base = el.createShape("polygon",{lineWidth:1, stroke:"black", fill:"brown", coords:[0,0,20,100,-20,100]})
         const color = randomColor()
-        const arms = paths.map(path =>el.createShape("polygon",{lineWidth:1, stroke:"black", fill:color, path:path}))
+        const arms = rotations.map(rotation =>el.createShape("polygon",
+            {lineWidth:1, stroke:"black", fill:color, path:`0 0 r ${rotation} f 50 l 90 f 20`}))
 
         setInterval(()=>rotateArms(arms),30)
     }
