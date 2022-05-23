@@ -27,7 +27,7 @@ npm install
 
 5) Start the server
 ```
-npm run dev
+npm start
 ```
 You should get a message that the server is running on port 3000
 
